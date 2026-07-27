@@ -36,19 +36,20 @@
   .brandbar{display:flex;align-items:center;justify-content:space-between;gap:20px;
     padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px;flex-wrap:wrap}
   .brandbar img{display:block;width:auto;max-width:100%}
-  .brandbar .bl img{height:38px}
-  .brandbar .br img{height:42px}
+  .brandbar .bl img{height:30px}
+  /* 현대벤디스 로고는 HYUNDAI 블록 + 한글 2단 구조라, 아래 글자가 읽히도록 조금 더 높게 */
+  .brandbar .br img{height:44px}
   /* 로고 이미지가 없을 때 쓰는 텍스트 워드마크 */
-  .wm{display:inline-flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;line-height:1}
-  .wm-danche{font-size:22px;color:var(--ink)}
-  .wm-danche i{width:20px;height:20px;background:var(--brand);border-radius:5px 5px 5px 1px;display:block}
-  .wm-vendys{font-size:18px;color:var(--ink-2)}
+  .wm{display:inline-flex;align-items:center;gap:8px;font-weight:800;letter-spacing:-.02em;line-height:1}
+  .wm-danche{font-size:18px;color:var(--ink)}
+  .wm-danche i{width:16px;height:16px;background:var(--brand);border-radius:4px 4px 4px 1px;display:block}
+  .wm-vendys{font-size:16px;color:var(--ink-2)}
   .wm-vendys u{display:flex;text-decoration:none}
-  .wm-vendys u b{width:9px;height:18px;display:block}
+  .wm-vendys u b{width:8px;height:16px;display:block}
   .wm-vendys u b:nth-child(1){background:var(--vendys)}
   .wm-vendys u b:nth-child(2){background:#111}
   .wm-vendys u b:nth-child(3){background:#E39A0C}
-  header.hd h1{margin:0;font-size:clamp(30px,2.7vw,44px);font-weight:800;letter-spacing:-.025em;line-height:1.24}
+  header.hd h1{margin:0;font-size:clamp(24px,2.05vw,33px);font-weight:800;letter-spacing:-.02em;line-height:1.26}
   header.hd h1 em{font-style:normal;color:var(--brand)}
 
   /* ── 검색 ───────────────────────────── */

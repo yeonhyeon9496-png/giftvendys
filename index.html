@@ -18,7 +18,7 @@
   *{box-sizing:border-box}
   body{margin:0;font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
        color:var(--ink);background:var(--bg);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1400px;margin:0 auto;padding:0 20px 150px}
+  .wrap{max-width:1760px;margin:0 auto;padding:0 28px 150px}
 
   /* ── 상단 고정 마감 배너 ─────────────── */
   .dbanner{position:sticky;top:0;z-index:120;background:linear-gradient(90deg,#1e3a5f,#2b6cb0);
@@ -131,10 +131,10 @@
   table.list tr.sel:hover{background:#fbe2ea}
   table.list img{width:74px;height:74px;object-fit:contain;background:#fff;border:1px solid var(--line-soft);border-radius:6px;cursor:pointer}
   table.list .c-code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--ink-3);white-space:nowrap}
-  table.list .c-name{font-weight:700;min-width:180px;max-width:230px;cursor:pointer}
+  table.list .c-name{font-weight:700;min-width:210px;max-width:300px;cursor:pointer}
   table.list .c-name:hover{color:var(--accent)}
-  table.list .c-comp{color:var(--ink-2);min-width:150px;max-width:200px;font-size:12px}
-  table.list .c-desc{color:var(--ink-2);min-width:240px;max-width:380px;font-size:12px;line-height:1.55}
+  table.list .c-comp{color:var(--ink-2);min-width:180px;max-width:280px;font-size:12px}
+  table.list .c-desc{color:var(--ink-2);min-width:300px;font-size:12px;line-height:1.55}
   table.list .c-desc .cut{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   table.list .c-desc a{color:var(--pink);text-decoration:none;font-weight:600;font-size:11.5px}
   table.list .c-price{text-align:right;white-space:nowrap}
@@ -178,7 +178,7 @@
     border-top:1px solid var(--line);box-shadow:0 -3px 16px rgba(26,32,44,.1);backdrop-filter:blur(6px);
     transform:translateY(105%);transition:transform .22s ease}
   .selbar.show{transform:translateY(0)}
-  .selbar-in{max-width:1400px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .selbar-in{max-width:1760px;margin:0 auto;padding:13px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .selbar .sum{font-size:14px;color:var(--ink-2)}
   .selbar .sum b{color:var(--ink);font-size:17px;font-weight:800}
   .selbar .sum .tot{color:var(--pink);font-weight:800;font-size:18px}
@@ -306,8 +306,8 @@
       <option value="nm">상품명순</option>
     </select>
     <div class="viewtog">
-      <button data-view="card" class="on">카드</button>
-      <button data-view="list">리스트</button>
+      <button data-view="list" class="on">리스트</button>
+      <button data-view="card">카드</button>
     </div>
     <button class="btn ghost" id="onlySel" disabled>선택한 상품만 보기 (0)</button>
     <button class="btn" id="clearSel" disabled>선택 해제</button>
@@ -378,7 +378,7 @@ const rate = p => (p.was > p.price && p.price > 0) ? Math.round((1 - p.price / p
 const dday = iso => Math.ceil((new Date(iso + 'T23:59:59') - new Date()) / 86400000);
 
 /* ── 상태 ───────────────────────────── */
-const st = { tab: 'price', chip: '__all__', q: '', sort: 'def', view: 'card', onlySel: false };
+const st = { tab: 'price', chip: '__all__', q: '', sort: 'def', view: 'list', onlySel: false };
 const sel = new Map();   // code -> qty(숫자 또는 null)
 const PANEL_BODY = document.querySelector('.p-body').innerHTML;   // 접수 완료 후 되돌리기용 원본
 

@@ -220,9 +220,11 @@
   .p-body{flex:1;overflow:auto;padding:18px 22px}
   .p-form{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
   .p-form label{font-size:11.5px;color:var(--ink-3);font-weight:700;display:block;margin-bottom:4px}
-  .p-form input{width:100%;padding:8px 11px;font-size:13.5px;font-family:inherit;border:1px solid var(--line);
-    border-radius:7px;background:var(--card);color:var(--ink)}
-  .p-form input:focus{outline:none;border-color:var(--vendys)}
+  .p-form .full{grid-column:1/-1}
+  .p-form input,.p-form textarea{width:100%;padding:8px 11px;font-size:13.5px;font-family:inherit;
+    border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--ink)}
+  .p-form textarea{resize:vertical;min-height:64px;line-height:1.55}
+  .p-form input:focus,.p-form textarea:focus{outline:none;border-color:var(--vendys)}
   table.qt{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card);
     border:1px solid var(--line);border-radius:9px;overflow:hidden}
   table.qt th{background:var(--bg);padding:9px 8px;font-size:11.5px;color:var(--ink-3);font-weight:700;
@@ -282,6 +284,9 @@
     #printArea th{background:#f0f2f5;font-weight:700}
     #printArea td.num{text-align:right;white-space:nowrap}
     #printArea tr.tot td{font-weight:800;background:#f7f9fb}
+    #printArea .memo{margin-top:12px;padding:9px 11px;border:1px solid #bbb;background:#fafafa;
+      font-size:11px;line-height:1.65;white-space:pre-wrap}
+    #printArea .memo b{font-size:10.5px;color:#555}
     #printArea .note{margin-top:12px;font-size:10.5px;color:#555;line-height:1.6}
     #printArea img{width:46px;height:46px;object-fit:contain}
     @page{margin:14mm}
@@ -372,6 +377,8 @@
       <div><label>담당자<span class="req" id="rqName">*</span></label><input type="text" id="fName" placeholder="예: 홍길동 과장"></div>
       <div><label>연락처 / 이메일<span class="req" id="rqTel">*</span></label><input type="text" id="fTel" placeholder="예: 010-0000-0000"></div>
       <div><label>희망 배송일</label><input type="text" id="fDate" placeholder="예: 2026-09-20"></div>
+      <div class="full"><label>담당자 메모</label>
+        <textarea id="fMemo" rows="3" placeholder="예산·배송 조건·포장 요청·기타 문의사항을 자유롭게 적어주세요."></textarea></div>
     </div>
     <table class="qt" id="qt"></table>
   </div>
@@ -381,10 +388,7 @@
     <div class="ft-row total money"><span>합계 (부가세 포함)</span><span id="ftTot">0원</span></div>
     <div class="ft-btns">
       <button class="btn primary" id="bSend" style="flex:1 1 100%">문의 접수하기</button>
-      <button class="btn" id="bXls">엑셀(CSV)</button>
-      <button class="btn" id="bPdf">PDF 저장</button>
-      <button class="btn" id="bCopy">목록 복사</button>
-      <button class="btn" id="bMail">메일로 보내기</button>
+      <button class="btn" id="bPdf" style="flex:1 1 100%">PDF 저장</button>
     </div>
     <div class="ft-note" id="pNote"></div>
   </div>
@@ -597,25 +601,8 @@ function renderQt() {
 }
 
 /* ── 내보내기 ───────────────────────── */
-const form = () => ({ co: $('fCo').value.trim(), nm: $('fName').value.trim(), tel: $('fTel').value.trim(), date: $('fDate').value.trim() });
-function csvCell(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }
-function exportCsv() {
-  const rows = selRows(); if (!rows.length) return toast('선택한 상품이 없습니다.');
-  const f = form();
-  const head = ['상품코드', '카테고리', '상품명', '구성', '원산지', '과세여부', '단가(부가세포함)', '수량', '금액'];
-  const body = rows.map(r => [r.p.code, r.p.cat, r.p.name, r.p.comp, r.p.orig, r.p.tax, r.p.price, r.qty || '', r.qty ? r.qty * r.p.price : '']);
-  const qty = rows.reduce((s, r) => s + (r.qty || 0), 0);
-  const tot = rows.reduce((s, r) => s + (r.qty ? r.qty * r.p.price : 0), 0);
-  body.push(['', '', '합계', '', '', '', '', qty, tot]);
-  const meta = [['2026 추석 단체선물대장 선택상품 문의서'], ['고객사', f.co], ['담당자', f.nm], ['연락처', f.tel],
-                ['희망 배송일', f.date], ['주문 마감', CFG.dueOfficial], []];
-  const csv = '﻿' + [...meta, head, ...body].map(r => r.map(csvCell).join(',')).join('\r\n');
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
-  a.download = '2026추석_선택상품_문의서' + (f.co ? '_' + f.co : '') + '.csv';
-  a.click(); URL.revokeObjectURL(a.href);
-  toast('엑셀(CSV) 파일을 내려받았습니다.');
-}
+const form = () => ({ co: $('fCo').value.trim(), nm: $('fName').value.trim(), tel: $('fTel').value.trim(),
+                      date: $('fDate').value.trim(), memo: $('fMemo').value.trim() });
 function buildPrint() {
   const rows = selRows(), f = form();
   const qty = rows.reduce((s, r) => s + (r.qty || 0), 0);
@@ -634,34 +621,10 @@ function buildPrint() {
         + '<td class="num">' + (r.qty ? won(r.qty * r.p.price) : '-') + '</td></tr>').join('')
     + '<tr class="tot"><td colspan="8">합계</td><td class="num">' + qty + '</td><td class="num">' + won(tot) + '</td></tr>'
     + '</tbody></table>'
+    + (f.memo ? '<div class="memo"><b>담당자 메모</b><br>' + esc(f.memo) + '</div>' : '')
     + '<div class="note">· 표시 금액은 부가세 포함 공급가이며 배송비는 별도입니다.<br>'
       + '· 재고·가격은 매입처 사정에 따라 변동될 수 있으며, 최종 금액은 견적서로 확정됩니다.<br>'
       + '· 문의 ' + esc(CFG.contactEmail) + '</div>';
-}
-function toMailto() {
-  const rows = selRows(); if (!rows.length) return toast('선택한 상품이 없습니다.');
-  const f = form();
-  const qty = rows.reduce((s, r) => s + (r.qty || 0), 0);
-  const tot = rows.reduce((s, r) => s + (r.qty ? r.qty * r.p.price : 0), 0);
-  const body = '[2026 추석 단체선물대장 선택상품 문의]\n\n'
-    + '고객사: ' + (f.co || '') + '\n담당자: ' + (f.nm || '') + '\n연락처: ' + (f.tel || '')
-    + '\n희망 배송일: ' + (f.date || '') + '\n\n'
-    + rows.map((r, i) => (i + 1) + '. [' + r.p.code + '] ' + r.p.name
-        + '\n   ' + won(r.p.price) + ' × ' + (r.qty || '수량 미정') + (r.qty ? ' = ' + won(r.qty * r.p.price) : '')).join('\n')
-    + '\n\n총 ' + rows.length + '개 상품' + (qty ? ' · ' + qty + '개 · 합계 ' + won(tot) : '')
-    + '\n(부가세 포함, 배송비 별도)';
-  location.href = 'mailto:' + CFG.contactEmail + '?subject='
-    + encodeURIComponent('[단체선물대장] 2026 추석 상품 문의' + (f.co ? ' - ' + f.co : '')) + '&body=' + encodeURIComponent(body);
-}
-function copyList() {
-  const rows = selRows(); if (!rows.length) return toast('선택한 상품이 없습니다.');
-  const qty = rows.reduce((s, r) => s + (r.qty || 0), 0);
-  const tot = rows.reduce((s, r) => s + (r.qty ? r.qty * r.p.price : 0), 0);
-  const txt = '[2026 추석 단체선물대장 선택상품]\n'
-    + rows.map((r, i) => (i + 1) + '. [' + r.p.code + '] ' + r.p.name + ' / ' + won(r.p.price)
-        + (r.qty ? ' × ' + r.qty + '개 = ' + won(r.qty * r.p.price) : '')).join('\n')
-    + (qty ? '\n합계 ' + won(tot) + ' (부가세 포함, 배송비 별도)' : '');
-  navigator.clipboard.writeText(txt).then(() => toast('선택목록을 복사했습니다.'), () => toast('복사 실패 — CSV를 이용해 주세요.'));
 }
 function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 1800); }
 
@@ -688,7 +651,7 @@ function payload() {
   return {
     inquiryId: inquiryId(),
     submittedAt: new Date().toISOString(),
-    company: f.co, contact: f.nm, phone: f.tel, wishDate: f.date,
+    company: f.co, contact: f.nm, phone: f.tel, wishDate: f.date, memo: f.memo,
     source: '웹카탈로그', season: CFG.season,
     dueOfficial: CFG.dueOfficial,
     itemCount: rows.length,
@@ -717,7 +680,7 @@ async function submitInquiry() {
   const btn = $('bSend'), data = payload(), body = JSON.stringify(data);
   btn.disabled = true; btn.textContent = '전송 중…';
 
-  // 실패 화면에서도 CSV·PDF로 내보낼 수 있도록 하단 버튼을 되살린다.
+  // 실패 화면에서도 PDF로 내보낼 수 있도록 하단 버튼을 되살린다.
   const fallback = () => { document.querySelector('.p-ft').style.display = ''; $('bSend').style.display = 'none'; };
 
   let ack = null;   // 서버 응답을 실제로 읽었을 때만 채워진다
@@ -735,7 +698,7 @@ async function submitInquiry() {
           '담당자가 확인 후 <b>영업일 기준 1일 이내</b>에 견적서로 회신드립니다.<br>접수번호를 남겨 두시면 진행 상황을 조회하실 수 있습니다.');
       } else {
         showSent('fail', null, esc(ack.error || '알 수 없는 오류')
-          + '<br>입력값을 확인하시거나 <b>엑셀(CSV)</b>로 내려받아 ' + esc(CFG.contactEmail) + ' 로 보내주세요.',
+          + '<br>입력값을 확인하시거나 <b>PDF 저장</b>으로 내려받아 ' + esc(CFG.contactEmail) + ' 로 보내주세요.',
           '접수가 반려되었습니다');
         fallback();
       }
@@ -743,13 +706,13 @@ async function submitInquiry() {
       // 로컬 파일·사내 프록시 등 응답을 읽을 수 없는 환경 — 전송만 시도하고 결과는 단정하지 않는다.
       await fetch(CFG.submitUrl, { method: 'POST', mode: 'no-cors', body: body });
       showSent('warn', data.inquiryId,
-        '전송은 되었으나 접수 확인 응답을 받지 못했습니다.<br>확실히 하시려면 아래 <b>엑셀(CSV)</b>을 내려받아 '
+        '전송은 되었으나 접수 확인 응답을 받지 못했습니다.<br>확실히 하시려면 <b>PDF 저장</b>으로 내려받아 '
         + esc(CFG.contactEmail) + ' 로도 보내주세요.');
       fallback();
     }
   } catch (e) {
     showSent('fail', null,
-      '네트워크 문제로 접수하지 못했습니다.<br><b>엑셀(CSV)</b> 또는 <b>PDF</b>로 내려받아 '
+      '네트워크 문제로 접수하지 못했습니다.<br><b>PDF 저장</b>으로 내려받아 '
       + esc(CFG.contactEmail) + ' 로 보내주세요.');
     fallback();
   } finally {
@@ -809,7 +772,6 @@ $('clearSel').onclick = $('sbClear').onclick = () => { if (sel.size && confirm('
 const openPanel = () => { $('panel').classList.add('open'); $('pbg').classList.add('open'); document.body.style.overflow = 'hidden'; };
 const closePanel = () => { $('panel').classList.remove('open'); $('pbg').classList.remove('open'); document.body.style.overflow = ''; };
 $('sbOpen').onclick = openPanel; $('pClose').onclick = closePanel; $('pbg').onclick = closePanel;
-$('bXls').onclick = exportCsv; $('bCopy').onclick = copyList; $('bMail').onclick = toMailto;
 $('bSend').onclick = submitInquiry;
 document.addEventListener('click', e => { if (e.target.id === 'bAgain') resetPanel(); });
 $('bPdf').onclick = () => { if (!sel.size) return toast('선택한 상품이 없습니다.'); buildPrint(); window.print(); };
@@ -823,13 +785,12 @@ $('bPdf').onclick = () => { if (!sel.size) return toast('선택한 상품이 없
   if (CFG.submitUrl) {
     $('pNote').innerHTML = '‘문의 접수하기’를 누르면 담당자에게 <b>바로 접수</b>되고 접수번호가 발급됩니다.<br>'
       + '수량은 비워두셔도 접수 가능합니다 — 담당자가 확인 후 견적서로 회신드립니다.<br>'
-      + '내부 결재용으로 필요하시면 <b>엑셀(CSV)</b>·<b>PDF 저장</b>도 함께 이용하세요.';
+      + '내부 결재용 자료가 필요하시면 <b>PDF 저장</b>을 이용하세요.';
   } else {
-    // 접수 서버(Apps Script) 미설정 상태 — 메일 접수로 대체
+    // 접수 서버(Apps Script) 미설정 상태
     $('bSend').style.display = 'none';
-    $('bMail').classList.add('primary'); $('bMail').style.flex = '1 1 100%';
-    $('pNote').innerHTML = '‘메일로 보내기’는 기본 메일 프로그램을 엽니다. 사용이 어려우면 <b>엑셀(CSV)</b> 또는 '
-      + '<b>PDF 저장</b>으로 내려받아 ' + esc(CFG.contactEmail) + ' 로 보내주세요.<br>'
+    $('bPdf').classList.add('primary');
+    $('pNote').innerHTML = '<b>PDF 저장</b>으로 내려받아 ' + esc(CFG.contactEmail) + ' 로 보내주세요.<br>'
       + '수량은 비워두셔도 문의 가능합니다 — 담당자가 확인 후 견적서로 회신드립니다.';
   }
   buildChips(); render(); syncSel();

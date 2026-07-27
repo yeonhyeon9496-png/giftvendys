@@ -20,7 +20,8 @@
   *{box-sizing:border-box}
   body{margin:0;font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
        color:var(--ink);background:var(--bg);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:100%;margin:0 auto;padding:0 28px 150px}
+  /* 양 사이드 여백 = 기본 28px + 1cm */
+  .wrap{max-width:100%;margin:0 auto;padding:0 calc(28px + 1cm) 150px}
 
   /* ── 상단 고정 마감 배너 ─────────────── */
   .dbanner{position:sticky;top:0;z-index:120;background:linear-gradient(90deg,var(--vendys-deep),var(--vendys));
@@ -153,9 +154,9 @@
   table.list .c-name{font-weight:700;min-width:260px;max-width:380px;cursor:pointer;
     word-break:keep-all;overflow-wrap:anywhere}
   table.list .c-name:hover{color:var(--vendys)}
-  table.list .c-comp{color:var(--ink-2);min-width:230px;max-width:340px;font-size:12px;
+  table.list .c-comp{color:var(--ink-2);width:230px;min-width:190px;max-width:280px;font-size:12px;
     word-break:keep-all;overflow-wrap:anywhere}
-  table.list .c-desc{color:var(--ink-2);width:280px;min-width:240px;max-width:300px;
+  table.list .c-desc{color:var(--ink-2);width:380px;min-width:320px;max-width:420px;
     font-size:12px;line-height:1.55}
   table.list .c-orig{white-space:nowrap;width:1%}
   table.list .c-desc .cut{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
@@ -201,7 +202,7 @@
     border-top:1px solid var(--line);box-shadow:0 -3px 16px rgba(26,32,44,.1);backdrop-filter:blur(6px);
     transform:translateY(105%);transition:transform .22s ease}
   .selbar.show{transform:translateY(0)}
-  .selbar-in{max-width:100%;margin:0 auto;padding:13px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .selbar-in{max-width:100%;margin:0 auto;padding:13px calc(28px + 1cm);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .selbar .sum{font-size:14px;color:var(--ink-2)}
   .selbar .sum b{color:var(--ink);font-size:17px;font-weight:800}
   .selbar .sum .tot{color:var(--brand);font-weight:800;font-size:18px}

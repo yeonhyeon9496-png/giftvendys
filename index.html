@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 추석 단체선물대장 상품 카탈로그</title>
+<style>
+  :root {
+    --ink:#1a202c; --ink-2:#4a5568; --ink-3:#8492a6;
+    --line:#e2e8f0; --line-soft:#edf2f7; --bg:#f7fafc; --card:#fff;
+    --accent:#2b6cb0; --accent-deep:#1e3a5f; --accent-soft:#ebf4fb; --accent-line:#bcd8ef;
+    --pink:#e8386d; --pink-soft:#fdeef3; --pink-line:#f6bdd0;
+    --gold:#9c6f19; --gold-soft:#fdf6e7; --gold-line:#ecd9a8;
+    --good-ink:#276749; --good-bg:#eefaf2; --good-line:#bfe6cd;
+    --danger:#c53030; --danger-bg:#fdf0ef; --danger-line:#f2c4c0;
+    --shadow:0 1px 2px rgba(26,32,44,.04), 0 4px 12px rgba(26,32,44,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1400px;margin:0 auto;padding:0 20px 150px}
+
+  /* ── 상단 고정 마감 배너 ─────────────── */
+  .dbanner{position:sticky;top:0;z-index:120;background:linear-gradient(90deg,#1e3a5f,#2b6cb0);
+           color:#fff;text-align:center;padding:9px 16px;font-size:13.5px;letter-spacing:.01em}
+  .dbanner b{font-weight:800}
+  .dbanner .dd{background:rgba(255,255,255,.18);border-radius:999px;padding:2px 10px;margin:0 6px;font-weight:800}
+  .dbanner .sep{opacity:.5;margin:0 8px}
+  .dbanner.urgent{background:linear-gradient(90deg,#9b2c2c,#c53030)}
+  .dbanner.closed{background:#4a5568}
+
+  /* ── 헤더 ───────────────────────────── */
+  header.hd{padding:26px 0 18px;display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  header.hd h1{margin:0;font-size:25px;font-weight:800;letter-spacing:-.01em}
+  header.hd h1 span{color:var(--accent)}
+  header.hd .sub{font-size:13px;color:var(--ink-3);padding-bottom:3px}
+
+  /* ── 검색 ───────────────────────────── */
+  .searchbox{position:relative;margin-bottom:16px}
+  .searchbox input{width:100%;padding:13px 16px 13px 42px;font-size:15px;font-family:inherit;
+    border:2px solid var(--pink-line);border-radius:10px;background:var(--card);color:var(--ink)}
+  .searchbox input:focus{outline:none;border-color:var(--pink)}
+  .searchbox::before{content:"⌕";position:absolute;left:15px;top:50%;transform:translateY(-50%);
+    color:var(--ink-3);font-size:21px;line-height:1}
+
+  /* ── 탭 ─────────────────────────────── */
+  .tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:14px}
+  .tabs button{border:0;background:none;font-family:inherit;font-size:15px;font-weight:700;
+    color:var(--ink-3);padding:10px 20px;cursor:pointer;position:relative;top:2px;
+    border-bottom:3px solid transparent}
+  .tabs button:hover{color:var(--ink-2)}
+  .tabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
+  .tabs .hint{margin-left:auto;align-self:center;font-size:12px;color:var(--ink-3);font-weight:400;padding-bottom:6px}
+
+  /* ── 칩 ─────────────────────────────── */
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+  .chip{border:1px solid var(--line);background:var(--card);color:var(--ink-2);border-radius:999px;
+    padding:7px 15px;font-size:13.5px;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap}
+  .chip:hover{border-color:var(--pink-line);color:var(--pink)}
+  .chip.on{background:var(--pink);border-color:var(--pink);color:#fff;font-weight:700}
+  .chip .c{opacity:.62;font-size:11.5px;margin-left:4px}
+  .chip.on .c{opacity:.8}
+  .chip:disabled{opacity:.38;cursor:default}
+  .chip:disabled:hover{border-color:var(--line);color:var(--ink-2)}
+
+  /* ── 툴바 ───────────────────────────── */
+  .toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:16px}
+  .toolbar .count{font-size:13.5px;color:var(--ink-2)}
+  .toolbar .count b{color:var(--ink);font-size:15px;font-weight:800}
+  .spacer{flex:1 1 auto}
+  select.sel,.btn{font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;
+    background:var(--card);color:var(--ink-2);padding:7px 12px;cursor:pointer}
+  select.sel:focus{outline:none;border-color:var(--accent)}
+  .btn{font-weight:600}
+  .btn:hover{border-color:var(--ink-3);color:var(--ink)}
+  .btn.primary{background:var(--pink);border-color:var(--pink);color:#fff}
+  .btn.primary:hover{background:#c92a5b;border-color:#c92a5b}
+  .btn.ghost.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn:disabled{opacity:.42;cursor:default}
+  .btn:disabled:hover{border-color:var(--line);color:var(--ink-2)}
+  .viewtog{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .viewtog button{border:0;background:var(--card);color:var(--ink-3);font-family:inherit;font-size:12.5px;
+    padding:7px 13px;cursor:pointer;font-weight:600}
+  .viewtog button.on{background:var(--accent);color:#fff}
+  .toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);cursor:pointer;user-select:none}
+  .toggle input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer}
+
+  /* ── 카드 그리드 ─────────────────────── */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:16px}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    display:flex;flex-direction:column;transition:box-shadow .15s,border-color .15s,transform .15s;position:relative}
+  .pcard:hover{box-shadow:var(--shadow);transform:translateY(-2px);border-color:var(--accent-line)}
+  .pcard.sel{border-color:var(--pink);box-shadow:0 0 0 2px var(--pink-soft)}
+  .pcard .pick{position:absolute;left:9px;top:9px;z-index:2;width:24px;height:24px;
+    accent-color:var(--pink);cursor:pointer}
+  .thumb{width:100%;aspect-ratio:1/1;background:#fff;cursor:pointer;overflow:hidden;
+    border-bottom:1px solid var(--line-soft)}
+  .thumb img{width:100%;height:100%;object-fit:contain;display:block}
+  .pbody{padding:12px 14px 14px;display:flex;flex-direction:column;flex:1}
+  .prow1{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+  .tag{font-size:10.5px;border-radius:5px;padding:2px 7px;font-weight:700;letter-spacing:.01em}
+  .tag.cat{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent-line)}
+  .tag.tax{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+  .tag.code{background:var(--line-soft);color:var(--ink-3);font-family:ui-monospace,Consolas,monospace;font-weight:600}
+  .pname{font-size:13.5px;font-weight:700;line-height:1.42;margin-bottom:6px;cursor:pointer;min-height:38px}
+  .pname:hover{color:var(--accent)}
+  .pmeta{font-size:11.5px;color:var(--ink-3);line-height:1.45;margin-bottom:4px}
+  .pmeta b{color:var(--ink-2);font-weight:600}
+  .pcomp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:33px}
+  .pdesc{font-size:11.5px;color:var(--ink-3);line-height:1.5;margin:6px 0 10px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .pdesc a{color:var(--pink);text-decoration:none;font-weight:600}
+  .pprice{margin-top:auto;display:flex;align-items:flex-end;gap:7px;flex-wrap:wrap}
+  .pprice .now{font-size:19px;font-weight:800;color:var(--pink);letter-spacing:-.01em;line-height:1.1}
+  .pprice .now small{font-size:13px;font-weight:700}
+  .pprice .rate{font-size:11.5px;font-weight:800;color:#fff;background:var(--pink);border-radius:4px;padding:1px 5px}
+  .pprice .was{font-size:12px;color:var(--ink-3);text-decoration:line-through}
+  body.nomoney .pprice,body.nomoney .m-price,body.nomoney .money{visibility:hidden}
+  body.nomoney .pprice::after{content:"가격 별도 안내";visibility:visible;font-size:12.5px;color:var(--ink-3)}
+
+  /* ── 리스트(테이블) 뷰 ───────────────── */
+  .tblwrap{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+  table.list{width:100%;border-collapse:collapse;font-size:13px;min-width:1080px}
+  table.list th{background:var(--bg);text-align:left;padding:11px 10px;font-size:12px;color:var(--ink-3);
+    font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;z-index:1}
+  table.list td{padding:11px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  table.list tr:last-child td{border-bottom:0}
+  table.list tr.sel{background:var(--pink-soft)}
+  table.list tr:hover{background:var(--accent-soft)}
+  table.list tr.sel:hover{background:#fbe2ea}
+  table.list img{width:74px;height:74px;object-fit:contain;background:#fff;border:1px solid var(--line-soft);border-radius:6px;cursor:pointer}
+  table.list .c-code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+  table.list .c-name{font-weight:700;min-width:180px;max-width:230px;cursor:pointer}
+  table.list .c-name:hover{color:var(--accent)}
+  table.list .c-comp{color:var(--ink-2);min-width:150px;max-width:200px;font-size:12px}
+  table.list .c-desc{color:var(--ink-2);min-width:240px;max-width:380px;font-size:12px;line-height:1.55}
+  table.list .c-desc .cut{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  table.list .c-desc a{color:var(--pink);text-decoration:none;font-weight:600;font-size:11.5px}
+  table.list .c-price{text-align:right;white-space:nowrap}
+  table.list .c-price .now{font-size:15px;font-weight:800;color:var(--pink)}
+  table.list .c-price .rate{display:inline-block;font-size:11px;font-weight:800;color:#fff;background:var(--pink);
+    border-radius:4px;padding:0 4px;margin-left:3px}
+  table.list .c-price .was{display:block;font-size:11.5px;color:var(--ink-3);text-decoration:line-through}
+  table.list input[type=checkbox]{width:19px;height:19px;accent-color:var(--pink);cursor:pointer}
+
+  .empty{grid-column:1/-1;text-align:center;padding:70px 20px;color:var(--ink-3);
+    background:var(--card);border:1px dashed var(--line);border-radius:12px}
+
+  /* ── 상세 모달 ───────────────────────── */
+  .mbg{position:fixed;inset:0;background:rgba(26,32,44,.55);z-index:200;display:none;
+    align-items:center;justify-content:center;padding:24px}
+  .mbg.open{display:flex}
+  .modal{background:var(--card);border-radius:14px;max-width:900px;width:100%;max-height:88vh;overflow:auto;position:relative}
+  .modal .x{position:absolute;right:12px;top:12px;width:32px;height:32px;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:17px;cursor:pointer;z-index:2}
+  .modal .x:hover{background:var(--bg);color:var(--ink)}
+  .m-top{display:grid;grid-template-columns:330px 1fr;gap:26px;padding:28px 30px 22px}
+  .m-img{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .m-img img{width:100%;display:block}
+  .m-name{font-size:21px;font-weight:800;margin:8px 0 14px;line-height:1.35}
+  .m-price{margin-bottom:18px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .m-price .now{font-size:27px;font-weight:800;color:var(--pink);letter-spacing:-.01em}
+  .m-price .rate{font-size:13px;font-weight:800;color:#fff;background:var(--pink);border-radius:5px;padding:2px 7px}
+  .m-price .was{font-size:14px;color:var(--ink-3);text-decoration:line-through}
+  .m-tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:18px}
+  .m-tbl th{text-align:left;padding:7px 12px 7px 0;color:var(--ink-3);font-weight:600;width:78px;
+    vertical-align:top;white-space:nowrap}
+  .m-tbl td{padding:7px 0;color:var(--ink-2);vertical-align:top;border-bottom:1px solid var(--line-soft)}
+  .m-tbl tr:last-child td{border-bottom:0}
+  .m-desc{border-top:1px solid var(--line);padding:20px 30px 28px;font-size:13.5px;color:var(--ink-2);
+    white-space:pre-wrap;line-height:1.75}
+  .m-desc h4{margin:0 0 10px;font-size:12px;color:var(--ink-3);letter-spacing:.06em;font-weight:700}
+  @media (max-width:780px){.m-top{grid-template-columns:1fr;padding:22px 20px 18px}}
+
+  /* ── 하단 고정 선택바 ───────────────── */
+  .selbar{position:fixed;left:0;right:0;bottom:0;z-index:150;background:rgba(255,255,255,.97);
+    border-top:1px solid var(--line);box-shadow:0 -3px 16px rgba(26,32,44,.1);backdrop-filter:blur(6px);
+    transform:translateY(105%);transition:transform .22s ease}
+  .selbar.show{transform:translateY(0)}
+  .selbar-in{max-width:1400px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .selbar .sum{font-size:14px;color:var(--ink-2)}
+  .selbar .sum b{color:var(--ink);font-size:17px;font-weight:800}
+  .selbar .sum .tot{color:var(--pink);font-weight:800;font-size:18px}
+
+  /* ── 문의 패널 ───────────────────────── */
+  .pbg{position:fixed;inset:0;background:rgba(26,32,44,.5);z-index:210;display:none}
+  .pbg.open{display:block}
+  .panel{position:fixed;right:0;top:0;bottom:0;width:720px;max-width:100%;background:var(--bg);z-index:220;
+    display:flex;flex-direction:column;transform:translateX(100%);transition:transform .24s ease}
+  .panel.open{transform:translateX(0)}
+  .p-hd{padding:18px 24px;background:var(--card);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between}
+  .p-hd h3{margin:0;font-size:17px;font-weight:800}
+  .p-hd .x{border:0;background:none;font-size:23px;color:var(--ink-3);cursor:pointer;line-height:1}
+  .p-body{flex:1;overflow:auto;padding:18px 22px}
+  .p-form{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .p-form label{font-size:11.5px;color:var(--ink-3);font-weight:700;display:block;margin-bottom:4px}
+  .p-form input{width:100%;padding:8px 11px;font-size:13.5px;font-family:inherit;border:1px solid var(--line);
+    border-radius:7px;background:var(--card);color:var(--ink)}
+  .p-form input:focus{outline:none;border-color:var(--accent)}
+  table.qt{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card);
+    border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  table.qt th{background:var(--bg);padding:9px 8px;font-size:11.5px;color:var(--ink-3);font-weight:700;
+    text-align:left;border-bottom:1px solid var(--line)}
+  table.qt td{padding:8px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+  table.qt tr:last-child td{border-bottom:0}
+  table.qt img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:5px}
+  table.qt .nm{font-weight:700;line-height:1.35}
+  table.qt .cd{font-size:11px;color:var(--ink-3);font-family:ui-monospace,Consolas,monospace}
+  table.qt .num{text-align:right;white-space:nowrap}
+  table.qt input.q{width:62px;padding:5px 7px;font-size:13px;font-family:inherit;text-align:center;
+    border:1px solid var(--line);border-radius:6px;-moz-appearance:textfield}
+  table.qt input.q::-webkit-outer-spin-button,table.qt input.q::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  table.qt input.q:focus{outline:none;border-color:var(--accent);background:var(--accent-soft)}
+  table.qt .del{border:0;background:none;color:var(--ink-3);font-size:16px;cursor:pointer;line-height:1}
+  table.qt .del:hover{color:var(--danger)}
+  .p-ft{border-top:1px solid var(--line);background:var(--card);padding:15px 22px 20px}
+  .ft-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2);margin-bottom:5px}
+  .ft-row.total{font-size:17px;font-weight:800;color:var(--ink);padding-top:8px;border-top:1px solid var(--line);margin-top:8px}
+  .ft-row.total span:last-child{color:var(--pink)}
+  .ft-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .ft-btns .btn{flex:1 1 130px;text-align:center;padding:10px 12px;font-size:13.5px}
+  .ft-note{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.55}
+  .req{color:var(--pink);margin-left:2px}
+  .p-form input.bad{border-color:var(--pink);background:var(--pink-soft)}
+  .sent{background:var(--card);border:1px solid var(--good-line);border-radius:12px;padding:34px 26px;text-align:center}
+  .sent .ico{font-size:40px;line-height:1;margin-bottom:12px}
+  .sent h4{margin:0 0 8px;font-size:19px;font-weight:800;color:var(--good-ink)}
+  .sent p{margin:0 0 6px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+  .sent .rid{display:inline-block;margin:12px 0 4px;background:var(--good-bg);border:1px solid var(--good-line);
+    color:var(--good-ink);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:700;
+    font-family:ui-monospace,Consolas,monospace}
+  .sent.warn{border-color:var(--gold-line)}
+  .sent.warn h4{color:var(--gold)}
+  .sent.warn .rid{background:var(--gold-soft);border-color:var(--gold-line);color:var(--gold)}
+  .sent.fail{border-color:var(--danger-line)}
+  .sent.fail h4{color:var(--danger)}
+
+  .toast{position:fixed;left:50%;bottom:98px;transform:translate(-50%,14px);background:var(--ink);color:#fff;
+    padding:10px 20px;border-radius:999px;font-size:13.5px;z-index:300;opacity:0;pointer-events:none;transition:all .2s}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  footer.foot{margin-top:36px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;
+    color:var(--ink-3);line-height:1.75}
+  footer.foot b{color:var(--ink-2)}
+
+  /* ── 인쇄(문의서 PDF) ───────────────── */
+  #printArea{display:none}
+  @media print{
+    body{background:#fff}
+    body>*:not(#printArea){display:none !important}
+    #printArea{display:block !important;padding:0;font-size:12px;color:#000}
+    #printArea h2{font-size:19px;margin:0 0 4px}
+    #printArea .pmeta{font-size:11.5px;color:#555;margin-bottom:14px}
+    #printArea table{width:100%;border-collapse:collapse;font-size:11px}
+    #printArea th,#printArea td{border:1px solid #bbb;padding:6px 7px;text-align:left;vertical-align:top}
+    #printArea th{background:#f0f2f5;font-weight:700}
+    #printArea td.num{text-align:right;white-space:nowrap}
+    #printArea tr.tot td{font-weight:800;background:#f7f9fb}
+    #printArea .note{margin-top:12px;font-size:10.5px;color:#555;line-height:1.6}
+    #printArea img{width:46px;height:46px;object-fit:contain}
+    @page{margin:14mm}
+  }
+
+  @media (max-width:640px){
+    .wrap{padding:0 12px 160px}
+    header.hd h1{font-size:20px}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:11px}
+    .pname{font-size:12.5px;min-height:36px}
+    .tabs button{padding:9px 14px;font-size:14px}
+    .p-form{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="dbanner" id="dbanner"></div>
+
+<div class="wrap">
+  <header class="hd">
+    <h1>2026 추석 <span>단체선물대장</span> 상품 카탈로그</h1>
+    <div class="sub" id="hdSub"></div>
+  </header>
+
+  <div class="searchbox">
+    <input type="text" id="q" placeholder="상품코드 · 상품명 · 구성으로 검색 (예: SG26040001, 스팸, 홍삼)" autocomplete="off">
+  </div>
+
+  <div class="tabs">
+    <button data-tab="price" class="on">가격대별</button>
+    <button data-tab="cat">카테고리별</button>
+    <span class="hint">칩을 클릭하면 해당 그룹의 확정 상품만 표시됩니다</span>
+  </div>
+  <div class="chips" id="chips"></div>
+
+  <div class="toolbar">
+    <span class="count"><b id="cnt">0</b>개 표시 <span id="cntSub" style="color:var(--ink-3);font-size:12.5px"></span></span>
+    <span class="spacer"></span>
+    <label class="toggle"><input type="checkbox" id="noMoney"> 금액 숨기고 보기</label>
+    <select class="sel" id="sort">
+      <option value="def">기본 정렬</option>
+      <option value="pl">가격 낮은순</option>
+      <option value="ph">가격 높은순</option>
+      <option value="rt">할인율 높은순</option>
+      <option value="nm">상품명순</option>
+    </select>
+    <div class="viewtog">
+      <button data-view="card" class="on">카드</button>
+      <button data-view="list">리스트</button>
+    </div>
+    <button class="btn ghost" id="onlySel" disabled>선택한 상품만 보기 (0)</button>
+    <button class="btn" id="clearSel" disabled>선택 해제</button>
+  </div>
+
+  <div id="view"></div>
+
+  <footer class="foot">
+    <b>안내</b> · 표시 금액은 <b>부가세 포함 공급가</b>이며 배송비는 별도 안내드립니다. 재고·가격은 매입처 사정에 따라 변동될 수 있습니다.<br>
+    <span id="footDue"></span><br>
+    <span id="footBuild"></span>
+  </footer>
+</div>
+
+<div class="mbg" id="mbg"><div class="modal" id="modal"></div></div>
+
+<div class="selbar" id="selbar">
+  <div class="selbar-in">
+    <div class="sum">선택 <b id="sbN">0</b>개<span class="money"> · 합계 <span class="tot" id="sbTot">0원</span></span></div>
+    <span class="spacer"></span>
+    <button class="btn" id="sbClear">선택 해제</button>
+    <button class="btn primary" id="sbOpen">선택상품으로 문의하기</button>
+  </div>
+</div>
+
+<div class="pbg" id="pbg"></div>
+<aside class="panel" id="panel">
+  <div class="p-hd">
+    <h3>선택상품 문의</h3>
+    <button class="x" id="pClose">&times;</button>
+  </div>
+  <div class="p-body">
+    <div class="p-form">
+      <div><label>고객사명<span class="req" id="rqCo">*</span></label><input type="text" id="fCo" placeholder="예: 주식회사 벤디스"></div>
+      <div><label>담당자<span class="req" id="rqName">*</span></label><input type="text" id="fName" placeholder="예: 홍길동 과장"></div>
+      <div><label>연락처 / 이메일<span class="req" id="rqTel">*</span></label><input type="text" id="fTel" placeholder="예: 010-0000-0000"></div>
+      <div><label>희망 배송일</label><input type="text" id="fDate" placeholder="예: 2026-09-20"></div>
+    </div>
+    <table class="qt" id="qt"></table>
+  </div>
+  <div class="p-ft">
+    <div class="ft-row"><span>선택 상품</span><span id="ftN">0개</span></div>
+    <div class="ft-row money"><span>총 수량</span><span id="ftQ">0개</span></div>
+    <div class="ft-row total money"><span>합계 (부가세 포함)</span><span id="ftTot">0원</span></div>
+    <div class="ft-btns">
+      <button class="btn primary" id="bSend" style="flex:1 1 100%">문의 접수하기</button>
+      <button class="btn" id="bXls">엑셀(CSV)</button>
+      <button class="btn" id="bPdf">PDF 저장</button>
+      <button class="btn" id="bCopy">목록 복사</button>
+      <button class="btn" id="bMail">메일로 보내기</button>
+    </div>
+    <div class="ft-note" id="pNote"></div>
+  </div>
+</aside>
+
+<div id="printArea"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DATA = [{"code":"SG26040068","name":"[해달음] 명품 광천도시락김 12봉","cat":"가공식품·통조림·오일","price":8250,"was":8620,"comp":"광천 아보카도유 도시락김 4g x 12봉","orig":"한국","tax":"과세","spec":"285 x 286 x 88 mm","desc":"\u003c해달음 광천김 선물세트\u003e\n 서해 청정 지역의 원초만을 엄선하여 재래김의 맛과 향을 고스란히 담았습니다.\n 1.국내산 고품질 원초사용\n 2.전통적인 방식으로 제작, 염분을 낮춘 저염식\n 3.몸에 좋은 첨가물로 더욱 건강하게\n \n -광천 아보카도유김\n 아보카도는 불포화지방산이 풍부하며 콜레스테롤을 낮추고 다양한 영양소가 풍부하여 성인병과 혈관 질환 예방에 도움이 됩니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/18AB6C04-BB16-4E09-ACFF-3DD90DF07866.png","due":"2026-10-15"},{"code":"SG26040069","name":"[해달음] 명품 광천도시락김 16봉","cat":"가공식품·통조림·오일","price":9130,"was":9250,"comp":"광천 아보카도유 도시락김 4g x 16봉","orig":"한국","tax":"과세","spec":"354 x 285 x 88 mm","desc":"\u003c해달음 광천김 선물세트\u003e\n 서해 청정 지역의 원초만을 엄선하여 재래김의 맛과 향을 고스란히 담았습니다.\n 1.국내산 고품질 원초사용\n 2.전통적인 방식으로 제작, 염분을 낮춘 저염식\n 3.몸에 좋은 첨가물로 더욱 건강하게\n \n -광천 아보카도유김\n 아보카도는 불포화지방산이 풍부하며 콜레스테롤을 낮추고 다양한 영양소가 풍부하여 성인병과 혈관 질환 예방에 도움이 됩니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/F397EDAF-653D-4C67-92BB-EC97AA703894.jpeg","due":"2026-10-15"},{"code":"SG26040072","name":"[해달음] 명품 광천김 종합2캔","cat":"가공식품·통조림·오일","price":12280,"was":18800,"comp":"트러플돌김 36g x 1, 아보카도유김 36g x 1, 쇼핑백","orig":"한국","tax":"과세","spec":"320 x 233 x 110 mm","desc":"\u003c해달음 광천김 선물세트\u003e\n 서해 청정 지역의 원초만을 엄선하여 재래김의 맛과 향을 고스란히 담았습니다.\n 1.국내산 고품질 원초사용\n 2.전통적인 방식으로 제작, 염분을 낮춘 저염식\n 3.몸에 좋은 첨가물로 더욱 건강하게\n 4.캔에 담아 신선함유지, 언제든 쉽게 먹을 수 있는 편리함\n \n -광천 트러플돌김\n 돌김은 바닷가 바위나 돌에 붙어 자란 자연산이 대부분입니다. \n 돌김은 양식김보다 표면이 거칠지만 바삭해서 씹는 맛이 아주 좋고 특유의 향이 있어 고소하며 색이 짙습니다. 그런 돌김과 트러플이 만나 더욱 건강하고 고급스러움을 높였습니다. 트러플은 항산화,항염증,면역강화,피부건강 등 다양한 건강효능이 있는 고급 식재료 입니다.\n \n -광천 아보카도유김\n 아보카도는 불포화지방산이 풍부하며 콜레스테롤을 낮추고 다양한 영양소가 풍부하여 성인병과 혈관 질환 예방에 도움이 됩니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/B01346BC-D72E-44EF-BE39-842E9D1DC2C9.jpg","due":"2026-10-15"},{"code":"SG26040071","name":"[집밥꾸러미] 직화김 5g x 27봉","cat":"가공식품·통조림·오일","price":14300,"was":0,"comp":"서천직화김 5g x 27봉","orig":"한국","tax":"과세","spec":"270 x 150 x 445 mm","desc":"\u003c서화직화김\u003e\n 500℃ 이상의 고온에서 3번 구워 완성한 맛있는 김\n 국산 김 원초로 바삭하게, 500℃ 이상의 온도로 구워 직화구이와 같은 풍미를 냈어요.\n 1차로는 200℃에서 구운 뒤, 2차에는 기름과 소금으로 간을 하고 300℃에서 다시 한번 구운 후 마지막으로 500℃이상의 고온에서 양면을 고르게 구워 직화구이 풍미를 살렸습니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/F3379EDD-404B-4BAD-9BE9-8049FDC765DC.jpeg","due":"2026-10-15"},{"code":"SG26040014","name":"[백설] 유러피안 오일세트 N호","cat":"가공식품·통조림·오일","price":15400,"was":17940,"comp":"유러피안 해바라기유 250ml x 2, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"255 x 150 x 50mm","desc":"\u003c유러피안 해바라기유\u003e\n 지중해의 햇살을 가득 담은 해바라기씨 100%로 만들어 유럽 현지에서 병에 담아 직수입 하였습니다.\n 해바라기유는 유럽인들이 선호하는 3대 유종 중 하나로 요리시 원재료 본연의 맛을 제대로 살려줍니다.\n 높은 온도의 조리에도 적합하여 튀김, 부침, 볶음, 구이 등 어느 요리에나 편리하게 사용하실 수 있습니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/88CFDFC3-8E06-469D-9C02-B7E18CD5842D.jpeg","due":"2026-10-15"},{"code":"SG26040006","name":"[CJ] 스팸스위트 W-6호","cat":"가공식품·통조림·오일","price":17600,"was":32200,"comp":"백설 2배 바삭 튀김유 500ml x 1, 백설 요리올리고당 700g x 1, 스팸 클래식 120g x 1, 스팸 싱클 클래식 80g x 2, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"305 x 296 x 51mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n \u003c백설 2배 바삭 튀김유\u003e\n CJ만의 차별화된 Crispy 공법을 적용하여 튀김을 2배 더 바삭하게 즐길 수 있습니다.\n Crispy 공법으로 튀김뿐만 아니라 전, 부침요리도 더욱 바삭하고 맛있게 즐길 수 있습니다.\n \u003c백설 요리 올리고당\u003e\n 감자조림, 어묵볶음 등 먹음직스러운 색감이 필요한 볶음,조림요리에 사용하세요.\n 프락토올리고당을 60% 함유하여 맛과 함께 건강까지 담았습니다. 설탕보다 칼로리가 30% 낮아 가볍게 즐길 수 있습니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/2DA32A08-44EE-4B35-AE84-99610F5E8FA6.jpeg","due":"2026-10-15"},{"code":"SG26040026","name":"[사조대림] 안심특선 J10호","cat":"가공식품·통조림·오일","price":17890,"was":24670,"comp":"살코기참치 85g × 3, 쟌슨빌클래식 120g × 4, 부직포쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"232 x 297 x 45mm","desc":"\u003c살코기참치\u003e 담백하고 고소한 참치의 맛을 느낄 수 있습니다.\n  \u003c쟌슨빌클래식\u003e 미국 No.1 소시지 브랜드 쟌슨빌 노하우로 만든 캔햄.\n 엄격한 품질관리 기준을 적용해 선별된 국산 돼지고기 사용\n 3無 첨가로 안심하고 먹을 수 있는 캔햄","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/F063FEF3-1D96-485C-BA15-07A76BED86BA.jpeg","due":"2026-10-15"},{"code":"SG26040073","name":"[해달음] 명품 광천김 종합3캔","cat":"가공식품·통조림·오일","price":17890,"was":26800,"comp":"트러플돌김 36g x 1, 바질페스토김 36g x 1, 홍삼김 36g x 1, 쇼핑백","orig":"한국","tax":"과세","spec":"415 x 233 x 110 mm","desc":"\u003c해달음 광천김 선물세트\u003e\n 서해 청정 지역의 원초만을 엄선하여 재래김의 맛과 향을 고스란히 담았습니다.\n 1.국내산 고품질 원초사용\n 2.전통적인 방식으로 제작, 염분을 낮춘 저염식\n 3.몸에 좋은 첨가물로 더욱 건강하게\n 4.캔에 담아 신선함유지, 언제든 쉽게 먹을 수 있는 편리함\n \n -광천 트러플돌김\n 돌김은 바닷가 바위나 돌에 붙어 자란 자연산이 대부분입니다. \n 돌김은 양식김보다 표면이 거칠지만 바삭해서 씹는 맛이 아주 좋고 특유의 향이 있어 고소하며 색이 짙습니다. 그런 돌김과 트러플이 만나 더욱 건강하고 고급스러움을 높였습니다. 트러플은 항산화,항염증,면역강화,피부건강 등 다양한 건강효능이 있는 고급 식재료 입니다. \n \n -광천 바질페스토김\n 어떤 요리에도 잘 어울리는 바질페스토는 비타민이 풍부하며 칼슘,철분,마그네슘도 함유되어 있습니다. 또한 소화불량을 해결해주고 식물성 항산화제가 풍부해 항염증 및 면역력 강화에 도움을 줍니다.\n \n -광천 홍삼김\n 홍삼은 백삼과 달리 말톨과 아미노산,유기지방산이 함유되어 있어 위장이 약하고 원기가 떨어진 사람에게 효과적입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/89D49994-C1F1-45D7-88AC-4738D4B39C09.png","due":"2026-10-15"},{"code":"SG26040010","name":"[CJ] 스팸안심참치 5호","cat":"가공식품·통조림·오일","price":20900,"was":44500,"comp":"스팸 클래식 120g x 4, 이츠웰 순살참치 85g x 3, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"231 x 283 x 40 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n \u003c이츠웰 순살참치\u003e\n 남태평양 청정해역에서 직접 잡아 올린 싱싱한 참치만 사용합니다.\n 손이 안전한 안심따개 (Easy Peel)를 적용하여 강철따개에 비해 안전하게 열 수 있습니다.\n 야채소스, 조개엑기스, 표고엑기스가 들어가 있어 담백하고 부드러운 살코기참치입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/612A05A6-96DB-4397-84AF-262610C5654C.jpeg","due":"2026-10-15"},{"code":"SG26040005","name":"[CJ] 스팸복합 SG-1호","cat":"가공식품·통조림·오일","price":23210,"was":42600,"comp":"백설 카놀라유 500ml x 1, 스팸 클래식 120g x 5, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"315 x 266 x 51mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n \u003c백설 카놀라유\u003e\n 숯의 원리를 활용하여 한번 더 여과한 5단계 정제시스템으로 만들어져 맑고 깨끗하며, 요리의 풍미를 살려줍니다. 불포화 지방산이90% 들어가 있어 건강을 생각 할 수 있습니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/206D5F18-DE67-4526-B2F8-0B963E19A04B.jpeg","due":"2026-10-15"},{"code":"SG26040024","name":"[동원] S9호","cat":"가공식품·통조림·오일","price":23210,"was":25460,"comp":"살코기참치 90g x 6, 고추참치 90g x 3, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"318 x 308 x 40 mm","desc":"\u003c살코기참치\u003e\n 동원이 직접 잡은 신선한 원어를 사용했습니다.\n 참치는 오메가 3가 풍부한 영양보고의 생선입니다.\n 김치찌개, 매운탕이나 전골 등에 넣어 드시면 국물 맛이 더욱 좋습니다.\n 김밥, 볶음밥 등에도 매우 좋습니다.\n \u003c고추참치\u003e\n 담백한 살코기에 고추소스를 넣어 중독성 있는 매운맛이 일품 입니다.\n 감자, 당근, 양파 등 다양한 부재료의 풍성한 식감까지 더해 맛있는 재료들의 환상 조합!","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/CDEC782D-8CB4-4D11-AE99-3A5BB6AA0010.png","due":"2026-10-15"},{"code":"SG26040023","name":"[CJ] 스팸 MC-A호","cat":"가공식품·통조림·오일","price":25520,"was":67000,"comp":"스팸 클래식 120g x 8, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"346 x 229 x 40 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n 스팸은 이렇게 꺼내세요. 스팸을 10초간 흐르는 뜨거운 물에 담그면 쉽게 꺼내실 수 있습니다.\n 원재료 및 함량 : 돼지고기 91.39%(지방일부사용/외국산:미국, 스페인, 캐나다등,국산),정제수,정제소금(국산),백설탕,혼합제제(폴리인산나트륨,피로인산나트륨,메타인산나트륨),전분가공품(태국산),카라기난,비타민C,아질산나트륨(발색제)","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/4B1E31AF-A6C7-4EC5-8A30-EC10BBD6347D.jpeg","due":"2026-10-15"},{"code":"SG26040074","name":"[해달음] 명품 광천김 종합4캔","cat":"가공식품·통조림·오일","price":26620,"was":29800,"comp":"바질페스토김 36g x 1, 트러플돌김 36g x 1, 아보카도유김 36g x 1, 홍삼김 36g x 1, 트러플 식탁김 13g x 2봉, 쇼핑백","orig":"한국","tax":"과세","spec":"415 x 395 x 110 mm","desc":"\u003c해달음 광천김 선물세트\u003e\n 서해 청정 지역의 원초만을 엄선하여 재래김의 맛과 향을 고스란히 담았습니다.\n 1.국내산 고품질 원초사용\n 2.전통적인 방식으로 제작, 염분을 낮춘 저염식\n 3.몸에 좋은 첨가물로 더욱 건강하게\n 4.캔에 담아 신선함유지, 언제든 쉽게 먹을 수 있는 편리함\n \n -광천 바질페스토김\n 어떤 요리에도 잘 어울리는 바질페스토는 비타민이 풍부하며 칼슘,철분,마그네슘도 함유되어 있습니다. 또한 소화불량을 해결해주고 식물성 항산화제가 풍부해 항염증 및 면역력 강화에 도움을 줍니다.\n \n -광천 트러플돌김\n 돌김은 바닷가 바위나 돌에 붙어 자란 자연산이 대부분입니다. \n 돌김은 양식김보다 표면이 거칠지만 바삭해서 씹는 맛이 아주 좋고 특유의 향이 있어 고소하며 색이 짙습니다. 그런 돌김과 트러플이 만나 더욱 건강하고 고급스러움을 높였습니다. 트러플은 항산화,항염증,면역강화,피부건강 등 다양한 건강효능이 있는 고급 식재료 입니다.\n \n -광천 아보카도유김\n 아보카도는 불포화지방산이 풍부하며 콜레스테롤을 낮추고 다양한 영양소가 풍부하여 성인병과 혈관 질환 예방에 도움이 됩니다.\n \n -광천 홍삼김\n 홍삼은 백삼과 달리 말톨과 아미노산,유기지방산이 함유되어 있어 위장이 약하고 원기가 떨어진 사람에게 효과적입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/7A6A1EC5-7DCB-41CE-8220-9953ACEA1DDA.png","due":"2026-10-15"},{"code":"SG26040004","name":"[CJ] 스팸 W호","cat":"가공식품·통조림·오일","price":28600,"was":66000,"comp":"스팸 클래식 200g x 5, 스팸 싱글 클래식 80g x 4, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"355 x 250 x 58 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n 스팸은 이렇게 꺼내세요. 스팸을 10초간 흐르는 뜨거운 물에 담그면 쉽게 꺼내실 수 있습니다.\n 원재료 및 함량 : 돼지고기 91.39%(지방일부사용/외국산:미국, 스페인, 캐나다등,국산),정제수,정제소금(국산),백설탕,혼합제제(폴리인산나트륨,피로인산나트륨,메타인산나트륨),전분가공품(태국산),카라기난,비타민C,아질산나트륨(발색제)","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/177EFED3-1D0A-4407-88DE-62C21BDC3BA9.jpeg","due":"2026-10-15"},{"code":"SG26040031","name":"[사조대림] 안심특선 V67호","cat":"가공식품·통조림·오일","price":29920,"was":33000,"comp":"살코기참치 85g × 6, 카놀라유 500ml × 1, 양조식초 500ml × 1, 라이트팜 115g × 1, 구운소금 200g × 1, 고소한참기름 110ml × 1, 맛술 500ml × 1, 홍게간장 500ml × 1, 부직포쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"512 x 379 x 50mm","desc":"\u003c살코기참치\u003e 담백하고 고소한 참치의 맛을 느낄 수 있습니다\n \u003c카놀라유\u003e 유채(카놀라)씨 100%로 만들었습니다\n \u003c양조식초\u003e 맥아를 초산발효시켜 맛과 향이 부드럽습니다\n \u003c구운소금\u003e 신안천일염 100%, 바다의 미네랄이 그대로 담긴 국산 천일염 입니다.\n \u003c참기름\u003e 국내에서 직접 착유한 진하고 고소한 참기름입니다.\n \u003c사조라이트팜\u003e 국내산 돼지, 닭고기를 사용해 믿을 수 있는 가정용 햄\n \u003c맛술\u003e 고기와 생선을 더 맛있게 만드는 맛술입니다\n \u003c홍게간장\u003e 국산 홍게액기스가 함유되어 더욱 깔끔하고 시원한 만능간장입니다","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/2B35B75A-1BC6-4915-B7B5-B1D8F0C5FAE7.png","due":"2026-10-15"},{"code":"SG26040009","name":"[CJ] 스팸안심참치 3호","cat":"가공식품·통조림·오일","price":31350,"was":71200,"comp":"스팸 클래식 200g x 5, 스팸 클래식 120g x 1, 이츠웰 순살참치 85g x 4, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"348 x 237 x 57 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n \u003c이츠웰 순살참치\u003e\n 남태평양 청정해역에서 직접 잡아 올린 싱싱한 참치만 사용합니다.\n 손이 안전한 안심따개 (Easy Peel)를 적용하여 강철따개에 비해 안전하게 열 수 있습니다.\n 야채소스, 조개엑기스, 표고엑기스가 들어가 있어 담백하고 부드러운 살코기참치입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/EBD70F88-5F13-4B84-AB3F-6AEA08F1E5AE.jpeg","due":"2026-10-15"},{"code":"SG26040032","name":"[사조대림] 안심특선 V76호","cat":"가공식품·통조림·오일","price":32340,"was":40570,"comp":"카놀라유 500ml × 1, 사과식초 500ml × 1, 살코기참치 85g × 6, 쟌슨빌클래식 200g × 1, 구운소금 200g × 1, 고소한참기름 110ml × 1, 맛술 500ml × 1, 양조간장 500ml × 1, 부직포쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"563 x 302 x 63mm","desc":"\u003c카놀라유\u003e 유채(카놀라)씨 100%로 만들었습니다.\n \u003c사과식초\u003e 사과향이 살아있는 100% 발효 사과식초.\n \u003c쟌슨빌클래식\u003e 미국 No.1 소시지 브랜드 쟌슨빌 노하우로 만든 캔햄.\n \u003c살코기참치\u003e 담백하고 고소한 참치의 맛을 느낄 수 있습니다.\n \u003c구운소금\u003e 신안천일염 100%, 바다의 미네랄이 그대로 담긴 국산 천일염 입니다.\n \u003c참기름\u003e 국내에서 직접 착유한 진하고 고소한 참기름입니다.\n \u003c맛술\u003e 고기와 생선을 더 맛있게 만드는 맛술입니다.\n \u003c양조간장\u003e 알콩을 그대로 사용해 영양과 풍미를 함께 살린 간장입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/1DB08850-14DB-4C4A-ACD7-4FD17AAE4C18.png","due":"2026-10-15"},{"code":"SG26040075","name":"[해달음] 명품 광천김 종합6캔","cat":"가공식품·통조림·오일","price":33330,"was":52300,"comp":"바질페스토김 36g x 2, 트러플돌김 36g x 2, 홍삼김 36g x 2, 쇼핑백","orig":"한국","tax":"과세","spec":"415 x 395 x 110 mm","desc":"\u003c해달음 광천김 선물세트\u003e\n 서해 청정 지역의 원초만을 엄선하여 재래김의 맛과 향을 고스란히 담았습니다.\n 1.국내산 고품질 원초사용\n 2.전통적인 방식으로 제작, 염분을 낮춘 저염식\n 3.몸에 좋은 첨가물로 더욱 건강하게\n 4.캔에 담아 신선함유지, 언제든 쉽게 먹을 수 있는 편리함\n \n -광천 바질페스토김\n 어떤 요리에도 잘 어울리는 바질페스토는 비타민이 풍부하며 칼슘,철분,마그네슘도 함유되어 있습니다. 또한 소화불량을 해결해주고 식물성 항산화제가 풍부해 항염증 및 면역력 강화에 도움을 줍니다.\n \n -광천 트러플돌김\n 돌김은 바닷가 바위나 돌에 붙어 자란 자연산이 대부분입니다. \n 돌김은 양식김보다 표면이 거칠지만 바삭해서 씹는 맛이 아주 좋고 특유의 향이 있어 고소하며 색이 짙습니다. 그런 돌김과 트러플이 만나 더욱 건강하고 고급스러움을 높였습니다. 트러플은 항산화,항염증,면역강화,피부건강 등 다양한 건강효능이 있는 고급 식재료 입니다.\n \n -광천 홍삼김\n 홍삼은 백삼과 달리 말톨과 아미노산,유기지방산이 함유되어 있어 위장이 약하고 원기가 떨어진 사람에게 효과적입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/79168CA1-59FD-498F-BBA0-F86F8BA3854B.jpeg","due":"2026-10-15"},{"code":"SG26040011","name":"[CJ 스팸 x Calvo A호","cat":"가공식품·통조림·오일","price":35750,"was":91000,"comp":"스팸 클래식 200g x 4, Calvo 올리브유 참치 65g x 3, Calvo 해바라기유 참치 65g x 3, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"288 x 268 x 58 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n \u003cCalvo 올리브유 참치\u003e\n 어떠한 조미성분이나 첨가물 없이 오직 참치와 올리브 오일, 소금 세가지 재료로 만들어져 참치 본연의 맛을 느낄 수 있습니다.\n 100% 스페인산 엑스트라버진 올리브유만 사용해 믿을 수 있고 향긋한 풍미가 느껴집니다.\n \u003cCalvo 해바라기유 참치\u003e\n 어떠한 조미성분이나 첨가물 없이 오직 참치와 해바라기유, 소금 세가지 재료로 만들어져 참치 본연의 맛을 느낄 수 있습니다.\n 스페인산 해바라기유로 채워 오일이 투명하고 맛이 깔끔해서 차가운요리, 따뜻한요리도 모두 잘어울립니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/CBCE2A1F-5AFD-483C-A651-F54EF0B58A53.jpeg","due":"2026-10-15"},{"code":"SG26040033","name":"[사조대림] 안심특선 V85호","cat":"가공식품·통조림·오일","price":37730,"was":42000,"comp":"카놀라유 500ml × 1, 살코기참치 85g × 6, 쟌슨빌클래식120g × 4, 쟌슨빌클래식 200g × 1,\n 고소한참기름 110ml × 1, 구운소금 200g × 1, 바삭요리유 500ml × 1, 부직포쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"583 x 298 x 51mm","desc":"\u003c카놀라유\u003e 유채(카놀라)씨 100%로 만들었습니다.\n \u003c살코기참치\u003e 담백하고 고소한 참치의 맛을 느낄 수 있습니다.\n \u003c쟌슨빌클래식\u003e 미국 No.1 소시지 브랜드 쟌슨빌 노하우로 만든 캔햄.\n \u003c구운소금\u003e 신안천일염 100%, 바다의 미네랄이 그대로 담긴 국산 천일염 입니다.\n \u003c참기름\u003e 국내에서 직접 착유한 진하고 고소한 참기름입니다.\n \u003c바삭요리유\u003e 콩기름과 카놀라유를 최적의 배합비로 만들었습니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/78835856-D508-4C88-8056-A1C87F8E5CCB.png","due":"2026-10-15"},{"code":"SG26040003","name":"[CJ] 스팸 HW호","cat":"가공식품·통조림·오일","price":39600,"was":88000,"comp":"스팸 클래식 200g x 6, 스팸 클래식 120g x 6, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"445 x 228 x 58 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n 스팸은 이렇게 꺼내세요. 스팸을 10초간 흐르는 뜨거운 물에 담그면 쉽게 꺼내실 수 있습니다.\n 원재료 및 함량 : 돼지고기 91.39%(지방일부사용/외국산:미국, 스페인, 캐나다등,국산),정제수,정제소금(국산),백설탕,혼합제제(폴리인산나트륨,피로인산나트륨,메타인산나트륨),전분가공품(태국산),카라기난,비타민C,아질산나트륨(발색제)","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/9D832B96-DE1D-4F42-8EAE-1E2CA3E0B619.jpg","due":"2026-10-15"},{"code":"SG26040076","name":"[해달음] 명품 광천김 종합8캔","cat":"가공식품·통조림·오일","price":39930,"was":51400,"comp":"트러플돌김 36g x 2, 바질페스토김 36g x 2, 아보카도유김 36g x 2, 홍삼김 36g x 2, 쇼핑백","orig":"한국","tax":"과세","spec":"548 x 405 x 110 mm","desc":"\u003c해달음 광천김 선물세트\u003e\n 서해 청정 지역의 원초만을 엄선하여 재래김의 맛과 향을 고스란히 담았습니다.\n 1.국내산 고품질 원초사용\n 2.전통적인 방식으로 제작, 염분을 낮춘 저염식\n 3.몸에 좋은 첨가물로 더욱 건강하게\n 4.캔에 담아 신선함유지, 언제든 쉽게 먹을 수 있는 편리함\n \n -광천 트러플 돌김\n 돌김은 바닷가 바위나 돌에 붙어 자란 자연산이 대부분입니다. \n 돌김은 양식김보다 표면이 거칠지만 바삭해서 씹는 맛이 아주 좋고 특유의 향이 있어 고소하며 색이 짙습니다. 그런 돌김과 트러플이 만나 더욱 건강하고 고급스러움을 높였습니다. 트러플은 항산화,항염증,면역강화,피부건강 등 다양한 건강효능이 있는 고급 식재료 입니다.\n \n -광천 바질페스토김\n 어떤 요리에도 잘 어울리는 바질페스토는 비타민이 풍부하며 칼슘,철분,마그네슘도 함유되어 있습니다. 또한 소화불량을 해결해주고 식물성 항산화제가 풍부해 항염증 및 면역력 강화에 도움을 줍니다.\n \n -광천 아보카도유김\n 아보카도는 불포화지방산이 풍부하며 콜레스테롤을 낮추고 다양한 영양소가 풍부하여 성인병과 혈관 질환 예방에 도움이 됩니다.\n \n -광천 홍삼김\n 홍삼은 백삼과 달리 말톨과 아미노산,유기지방산이 함유되어 있어 위장이 약하고 원기가 떨어진 사람에게 효과적입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/5E8E872E-39A3-4044-A81D-03BAB320514B.png","due":"2026-10-15"},{"code":"SG26040034","name":"[사조대림] 안심특선 V89호","cat":"가공식품·통조림·오일","price":41120,"was":42000,"comp":"살코기참치 85g × 6, 카놀라유 500ml × 1, 쟌슨빌클래식 120g × 4, 참치액 500g × 1, 쟌슨빌클래식 200g × 1, 참기름 110ml × 1, 구운소금 200g × 1, 사과식초 500ml × 1, 양조간장 500ml × 1, 부직포쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"547 x 380 x 55mm","desc":"\u003c카놀라유\u003e 유채(카놀라)씨 100%로 만들었습니다.\n \u003c살코기참치\u003e 담백하고 고소한 참치의 맛을 느낄 수 있습니다.\n \u003c쟌슨빌클래식\u003e 미국 No.1 소시지 브랜드 쟌슨빌 노하우로 만든 캔햄.\n \u003c구운소금\u003e 신안천일염 100%, 바다의 미네랄이 그대로 담긴 국산 천일염 입니다.\n \u003c참기름\u003e 국내에서 직접 착유한 진하고 고소한 참기름입니다.\n \u003c사과식초\u003e 사과향이 살아있는 100% 발효 사과식초\n \u003c참치액\u003e 국,탕,찌개/볶음 등 모든 한식요리에, 깊은 감칠 맛을 UP!\n \u003c양조간장\u003e 알콩을 그대로 사용해 영양과 풍미를 함께 살린 간장입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/F94DD8D7-DF8C-4021-A563-CF22BE279B16.png","due":"2026-10-15"},{"code":"SG26040008","name":"[CJ] 스팸참치 2호","cat":"가공식품·통조림·오일","price":42350,"was":113000,"comp":"스팸 클래식 200g x 8, 스팸 클래식 120g x 1, 살코기참치 85g x 4, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"500 x 208 x 58 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n \u003c살코기참치\u003e\n 남태평양 청정해역에서 직접 잡아 올린 싱싱한 참치만 사용합니다.\n 손이 안전한 안심따개 (Easy Peel)를 적용하여 강철따개에 비해 안전하게 열 수 있습니다.\n 야채소스, 조개엑기스, 표고엑기스가 들어가 있어 담백하고 부드러운 살코기참치입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/FA34692D-D0C7-4D35-8531-DE72C625266A.jpeg","due":"2026-10-15"},{"code":"SG26040002","name":"[CJ] 스팸 7S호","cat":"가공식품·통조림·오일","price":43450,"was":108400,"comp":"스팸 클래식 200g x 10, 스팸 클래식 120g x 2, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"440 x 203 x 58 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n 스팸은 이렇게 꺼내세요. 스팸을 10초간 흐르는 뜨거운 물에 담그면 쉽게 꺼내실 수 있습니다.\n 원재료 및 함량 : 돼지고기 91.39%(지방일부사용/외국산:미국, 스페인, 캐나다등,국산),정제수,정제소금(국산),백설탕,혼합제제(폴리인산나트륨,피로인산나트륨,메타인산나트륨),전분가공품(태국산),카라기난,비타민C,아질산나트륨(발색제)","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/61741716-009C-470C-8948-BB7D21A8A275.jpeg","due":"2026-10-15"},{"code":"SG26040013","name":"[CJ 스팸 x Calvo C호","cat":"가공식품·통조림·오일","price":44550,"was":109020,"comp":"스팸 클래식 120g x 4, Calvo 올리브유 참치 65g x 6, Calvo 해바라기유 참치 65g x 6, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"440 x 279 x 40 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n \u003cCalvo 올리브유 참치\u003e\n 어떠한 조미성분이나 첨가물 없이 오직 참치와 올리브 오일, 소금 세가지 재료로 만들어져 참치 본연의 맛을 느낄 수 있습니다.\n 100% 스페인산 엑스트라버진 올리브유만 사용해 믿을 수 있고 향긋한 풍미가 느껴집니다.\n \u003cCalvo 해바라기유 참치\u003e\n 어떠한 조미성분이나 첨가물 없이 오직 참치와 해바라기유, 소금 세가지 재료로 만들어져 참치 본연의 맛을 느낄 수 있습니다.\n 스페인산 해바라기유로 채워 오일이 투명하고 맛이 깔끔해서 차가운요리, 따뜻한요리도 모두 잘어울립니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/7ECBC80A-F6EF-46F6-802D-FB60A0675625.jpeg","due":"2026-10-15"},{"code":"SG26040035","name":"[사조대림] 안심특선 V96호","cat":"가공식품·통조림·오일","price":45650,"was":51620,"comp":"살코기참치 85g × 7, 카놀라유 500ml × 1, 참치액 500g × 1, 쟌슨빌클래식 120g × 4, 건강한올리고당 700g × 1, 올리브유 250ml × 1, 포도씨유 250ml × 1, 쟌슨빌클래식 200g × 1, 양조간장 500ml × 1, 부직포쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"592 x 378 x 56mm","desc":"\u003c살코기참치\u003e 담백하고 고소한 참치의 맛을 느낄 수 있습니다.\n \u003c카놀라유\u003e 유채(카놀라)씨 100%로 만들었습니다.\n \u003c포도씨유\u003e 스페인 지중해 연안의 포도씨로 만든 최상급 포도씨유\n \u003c올리브유\u003e 최고 등급의 Extra Virgin 올리브유\n \u003c쟌슨빌클래식\u003e 미국 No.1 소시지 브랜드 쟌슨빌 노하우로 만든 캔햄\n \u003c올리고당\u003e 사탕수수로 만든 식이섬유가 들어있는 올리고당\n  \u003c참치액\u003e 국,탕,찌개/볶음 등 모든 한식요리에, 깊은 감칠 맛을 UP!\n \u003c양조간장\u003e 알콩을 그대로 사용해 영양과 풍미를 함께 살린 간장입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/FB1291C5-8781-454F-BD5D-B973F37BF9C5.png","due":"2026-10-15"},{"code":"SG26040077","name":"[해달음] 명품 광천김 종합10캔","cat":"가공식품·통조림·오일","price":46420,"was":50800,"comp":"트러플돌김 36g x 2, 바질페스토김 36g x 2, 아보카도유김 36g x 3, 홍삼김 36g x 3, 쇼핑백","orig":"한국","tax":"과세","spec":"548 x 405 x 110 mm","desc":"\u003c해달음 광천김 선물세트\u003e\n 서해 청정 지역의 원초만을 엄선하여 재래김의 맛과 향을 고스란히 담았습니다.\n 1.국내산 고품질 원초사용\n 2.전통적인 방식으로 제작, 염분을 낮춘 저염식\n 3.몸에 좋은 첨가물로 더욱 건강하게\n 4.캔에 담아 신선함유지, 언제든 쉽게 먹을 수 있는 편리함\n \n -광천 트러플돌김\n 돌김은 바닷가 바위나 돌에 붙어 자란 자연산이 대부분입니다. \n 돌김은 양식김보다 표면이 거칠지만 바삭해서 씹는 맛이 아주 좋고 특유의 향이 있어 고소하며 색이 짙습니다. 그런 돌김과 트러플이 만나 더욱 건강하고 고급스러움을 높였습니다. 트러플은 항산화,항염증,면역강화,피부건강 등 다양한 건강효능이 있는 고급 식재료 입니다.\n \n -광천 바질페스토김\n 어떤 요리에도 잘 어울리는 바질페스토는 비타민이 풍부하며 칼슘,철분,마그네슘도 함유되어 있습니다. 또한 소화불량을 해결해주고 식물성 항산화제가 풍부해 항염증 및 면역력 강화에 도움을 줍니다.\n \n -광천 아보카도유김\n 아보카도는 불포화지방산이 풍부하며 콜레스테롤을 낮추고 다양한 영양소가 풍부하여 성인병과 혈관 질환 예방에 도움이 됩니다.\n \n -광천 홍삼김\n 홍삼은 백삼과 달리 말톨과 아미노산,유기지방산이 함유되어 있어 위장이 약하고 원기가 떨어진 사람에게 효과적입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/C7E940BA-C8E6-4117-AA85-1DE4919EBBBD.png","due":"2026-10-15"},{"code":"SG26040012","name":"[CJ 스팸 x Calvo B호","cat":"가공식품·통조림·오일","price":47300,"was":124000,"comp":"스팸 클래식 200g x 8, Calvo 올리브유 참치 65g x 3, Calvo 해바라기유 참치 65g x 3, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"397 x 268 x 58 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n \u003cCalvo 올리브유 참치\u003e\n 어떠한 조미성분이나 첨가물 없이 오직 참치와 올리브 오일, 소금 세가지 재료로 만들어져 참치 본연의 맛을 느낄 수 있습니다.\n 100% 스페인산 엑스트라버진 올리브유만 사용해 믿을 수 있고 향긋한 풍미가 느껴집니다.\n \u003cCalvo 해바라기유 참치\u003e\n 어떠한 조미성분이나 첨가물 없이 오직 참치와 해바라기유, 소금 세가지 재료로 만들어져 참치 본연의 맛을 느낄 수 있습니다.\n 스페인산 해바라기유로 채워 오일이 투명하고 맛이 깔끔해서 차가운요리, 따뜻한요리도 모두 잘어울립니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/0E1EE446-92F3-45ED-A948-EA039C5AF03D.jpeg","due":"2026-10-15"},{"code":"SG26040021","name":"[CJ] 스팸 MC 3호","cat":"가공식품·통조림·오일","price":48950,"was":49900,"comp":"스팸 클래식 340g x 4, 스팸 클래식 200g x 4, 스팸 클래식 120g x 4, 부직포쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"456 x 257 x 62 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n 스팸은 이렇게 꺼내세요. 스팸을 10초간 흐르는 뜨거운 물에 담그면 쉽게 꺼내실 수 있습니다.\n 원재료 및 함량 : 돼지고기 91.39%(지방일부사용/외국산:미국, 스페인, 캐나다등,국산),정제수,정제소금(국산),백설탕,혼합제제(폴리인산나트륨,피로인산나트륨,메타인산나트륨),전분가공품(태국산),카라기난,비타민C,아질산나트륨(발색제)","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/E5761ED9-6E34-4A38-8076-0F41DC5ED0A6.jpeg","due":"2026-10-15"},{"code":"SG26040001","name":"[CJ] 스팸 6S호","cat":"가공식품·통조림·오일","price":52250,"was":112500,"comp":"스팸 클래식 200g x 8, 스팸 클래식 120g x 8, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"448 x 295 x 58 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n 스팸은 이렇게 꺼내세요. 스팸을 10초간 흐르는 뜨거운 물에 담그면 쉽게 꺼내실 수 있습니다.\n 원재료 및 함량 : 돼지고기 91.39%(지방일부사용/외국산:미국, 스페인, 캐나다등,국산),정제수,정제소금(국산),백설탕,혼합제제(폴리인산나트륨,피로인산나트륨,메타인산나트륨),전분가공품(태국산),카라기난,비타민C,아질산나트륨(발색제)","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/6F549F96-27C5-4C3C-A768-EDC24A8A007A.jpeg","due":"2026-10-15"},{"code":"SG26040007","name":"[CJ] 스팸안심참치 1호","cat":"가공식품·통조림·오일","price":53900,"was":122820,"comp":"스팸 클래식 200g x 8, 이츠웰 순살참치 85g x 12, 쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"398 x 265 x 77 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n \u003c이츠웰 순살참치\u003e\n 남태평양 청정해역에서 직접 잡아 올린 싱싱한 참치만 사용합니다.\n 손이 안전한 안심따개 (Easy Peel)를 적용하여 강철따개에 비해 안전하게 열 수 있습니다.\n 야채소스, 조개엑기스, 표고엑기스가 들어가 있어 담백하고 부드러운 살코기참치입니다.","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/61FC8C2A-1D7D-4E80-A405-EBF13A433A0D.jpeg","due":"2026-10-15"},{"code":"SG26040019","name":"[CJ] 스팸 PS1호(구 MC1호)","cat":"가공식품·통조림·오일","price":70400,"was":73350,"comp":"스팸 클래식 200g x 20, 부직포쇼핑백","orig":"한국, 수입산","tax":"과세","spec":"616 x 317 x 62 mm","desc":"\u003c스팸 클래식\u003e\n 그 누구도 따라올 수 없는 스팸만의 아이코닉한 맛으로 30년간 꾸준히 사랑받고 있는 스팸입니다.\n 다양한 방식으로 즐기세요. 무스비, 튀김 등 스팸과 함께라면 어떤 메뉴든 맛있어집니다.\n 스팸은 이렇게 꺼내세요. 스팸을 10초간 흐르는 뜨거운 물에 담그면 쉽게 꺼내실 수 있습니다.\n 원재료 및 함량 : 돼지고기 91.39%(지방일부사용/외국산:미국, 스페인, 캐나다등,국산),정제수,정제소금(국산),백설탕,혼합제제(폴리인산나트륨,피로인산나트륨,메타인산나트륨),전분가공품(태국산),카라기난,비타민C,아질산나트륨(발색제)","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/04AEE51D-0D07-4AE6-A536-CB5C136DB5FA.jpeg","due":"2026-10-15"},{"code":"SG26040036","name":"[한삼인] 홍기천 스틱 (10ml x 30포)","cat":"건강식품·홍삼","price":20570,"was":24540,"comp":"홍기천 스틱 10ml x 30포, 쇼핑백","orig":"한국","tax":"과세","spec":"286 x 193 x 42 mm","desc":"\u003c홍기천 스틱\u003e\n 6년근 홍삼농축액 1.96% 첨가하여 홍삼의 5대 기능성에 충족하는 건강기능식품\n 원기회복에 좋은 전통원료 9종(당귀, 천궁, 숙지황, 백출, 결명자, 오가피, 백복령, 구기자, 산수유)을 혼합한 식물혼합농축액 첨가로 깊은 풍미의 홍삼음료\n 스트레스와 피로에 지친 현대인을 위한 부원료 타우린 첨가로 기력 보충\n 남녀노소 누구나 간편하게 섭취 가능한 액상 스틱 타입\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/BE86B83E-0D77-4BAD-B90A-CB528D398A81.jpeg","due":"2026-10-15"},{"code":"SG26040037","name":"[한삼인] 홍기천 침향환 (3.75g x 30환)","cat":"건강식품·홍삼","price":22990,"was":27900,"comp":"홍기천 침향환 3.75g x 30환, 쇼핑백","orig":"한국","tax":"과세","spec":"245 x 214 x 42 mm","desc":"\u003c홍기천 침향환\u003e\n 한삼인의 고농축 기술로 만들어진 6년근 국산 홍삼농축액 0.15%와 귀한 침향을 3% 배합한 합리적 가격대의 대환형 상품\n 가시오가피, 개똥쑥, 삼백초 등 건강한 전통 식물성 원료와 타우린을 함께 배합하여 활력에 도움을 주는 상품\n 휴대와 섭취에 용이한 개별포장으로 어디서나 간편하게 섭취가능한 상품\n 섭취방법 : 1일 1회 1환을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/B358B0F0-0E9A-4998-88CD-E41242705B55.png","due":"2026-10-15"},{"code":"SG26040038","name":"[한삼인] 홍기천 앰플 (20g x 16병)","cat":"건강식품·홍삼","price":25410,"was":30500,"comp":"홍기천 앰플 20g x 16병, 쇼핑백","orig":"한국","tax":"과세","spec":"240 x 235 x 37 mm","desc":"\u003c홍기천 앰플\u003e\n 한삼인의 고농축 기술로 만들어진 6년근 국산 홍삼농축액 0.5%가 함유 된 합리적 가격대의 16병입 앰플 상품\n 당귀, 천궁, 지황, 오가피 등 건강한 전통 식물성 원료와 타우린을 함께 배합하여 활력에 도움을 주는 상품\n 섭취용이성과 고급스러움을 동시에 잡은 앰플병 패키지로 선물용으로도 좋은 상품\n 섭취방법 : 1일 1회 1병을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/B92760AC-C0D9-4869-96C3-CF54A22AE692.jpeg","due":"2026-10-15"},{"code":"SG26040039","name":"[한삼인] 홍삼진 굿데이스틱 (10mL × 60포)","cat":"건강식품·홍삼","price":27940,"was":29800,"comp":"홍삼진 굿데이스틱 10mL × 60포, 쇼핑백","orig":"한국","tax":"과세","spec":"349 x 205 x 50 mm","desc":"\u003c홍삼진 굿데이스틱\u003e\n 한삼인의 고농축 기술로 만들어진 홍삼농축액을 함유한 건강기능식품\n 하루 1포로 진세노사이드 3mg 섭취(2달분)\n 귀한 홍삼과 침향에 녹용, 황기, 감초, 숙지황 등의 약재를 배합\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/5BF35EC5-1B54-4E34-93B9-74EDCB7CE153.jpeg","due":"2026-10-15"},{"code":"SG26040040","name":"[한삼인] 홍삼진 굿데이앰플 (20g x 20병)","cat":"건강식품·홍삼","price":31570,"was":35000,"comp":"홍삼진 굿데이앰플 20g x 20병, 쇼핑백","orig":"한국","tax":"과세","spec":"281 x 234 x 37 mm","desc":"\u003c홍삼진 굿데이앰플\u003e\n 한삼인의 고농축 기술로 만들어진 6년근 홍삼농축액과 국산 녹용이 함유된 20병입 앰플 상품 \n 대추, 당귀, 천궁, 황기, 작약 등 다양한 식물성 원료 함유 \n 섭취용이성과 고급스러움을 동시에 잡은 앰플병 패키지 제품\n 섭취방법 : 1일 1회 1병을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/8A477928-77B5-4B07-B8A5-82CC294633C5.jpeg","due":"2026-10-15"},{"code":"SG26040041","name":"[한삼인] 대보선물세트 2호","cat":"건강식품·홍삼","price":32780,"was":34200,"comp":"홍삼대보 75ml x 12병, 홍삼대보환 3.75g x 12환, 쇼핑백","orig":"한국","tax":"과세","spec":"397 x 258 x 58 mm","desc":"\u003c대보선물세트 2호\u003e\n 홍기천, 홍삼대보 및 홍삼대보환 제품을 함께 구성한 고급 선물세트\n 선물이 연상되는 리본그래픽과 한국적인 패턴을 적용한 명절 선물세트\n 무게감 있는 색감을 활용하여 홍삼 선물세트의 고급스러움을 강조한 제품\n 한약재와 홍삼이 조화롭게 구성되어 고급스러운 맛이 나는 제품구성\n 섭취방법 : 1일 1회 1병(환)을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/7F99E8F0-D9FA-42F6-9DA3-505AE2629358.jpeg","due":"2026-10-15"},{"code":"SG26040042","name":"[한삼인] 일품홍삼 앰플 (20mL × 16병)","cat":"건강식품·홍삼","price":33990,"was":66460,"comp":"일품홍삼 앰플 20mL × 16병, 쇼핑백","orig":"한국","tax":"과세","spec":"228 x 234 x 32 mm","desc":"\u003c일품홍삼 앰플\u003e\n 앰플 당 6년근 홍삼농축액 5% 함유\n 앰플 포장으로 편리한 보관 가능\n 천궁, 숙지황, 계피, 당귀, 감초, 황기 등 다양한 식물성원료 함유\n 프락토올리고당, 벌꿀과 대추농축액이 홍삼과 어우러진 부드러운 단맛\n 섭취방법 : 1일 1회 1병을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/49F6B617-8C8B-4055-B1D2-6FB9B5B50423.jpeg","due":"2026-10-15"},{"code":"SG26040043","name":"[한삼인] 대보선물세트 3호","cat":"건강식품·홍삼","price":40150,"was":44810,"comp":"홍기천 50mL × 10포, 홍삼대보 75mL × 8병, 홍삼대보환 3.75g × 12환), 쇼핑백","orig":"한국","tax":"과세","spec":"437 x 268 x 58 mm","desc":"\u003c대보선물세트 3호\u003e\n 홍기천, 홍삼대보 및 홍삼대보환 제품을 함께 구성한 고급 선물세트\n 선물이 연상되는 리본그래픽과 한국적인 패턴을 적용한 선물세트\n 무게감 있는 색감을 활용하여 홍삼 선물세트의 고급스러움을 강조한 제품\n 한약재와 홍삼이 조화롭게 구성되어 고급스러운 맛이 나는 제품구성\n 섭취방법 : 1일 1회 1포(환, 병)를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/B6551F3D-7838-45A1-92E7-29ABAA4F8297.jpeg","due":"2026-10-15"},{"code":"SG26040044","name":"[한삼인] 홍삼진 천지옥고 (50g × 6병)","cat":"건강식품·홍삼","price":42570,"was":82400,"comp":"홍삼진 천지옥고 50g × 6병, 쇼핑백","orig":"한국","tax":"과세","spec":"190 x 160 x 53 mm","desc":"\u003c홍삼진 천지옥고\u003e\n 우리 땅에서 자란 귀한 6년근 홍삼을 정성스럽게 달여낸 제품입니다.\n 1일 섭취량 (8g) 당 진세노사이드 4mg 섭취 가능한 건강기능식품 입니다.\n 농협홍삼에서 엄선한 9가지의 전통부원료를 사용하였습니다 (당귀, 숙지황, 천궁, 결명자, 삽주, 오가피, 복령, 구기자, 산수유)\n 콤팩트한 사이즈로 가족, 지인 선물용으로 좋은 패키지를 구성하였습니다.\n 섭취방법 : 1일 1회 1스푼을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/C6B0458A-3E30-4E9D-A086-C795918F424A.jpeg","due":"2026-10-15"},{"code":"SG26040045","name":"[한삼인] 홍삼진 굿데이스틱 (10 mL × 100포)","cat":"건강식품·홍삼","price":42570,"was":46460,"comp":"홍삼진 굿데이스틱 10 mL × 100포, 쇼핑백","orig":"한국","tax":"과세","spec":"349 x 205 x 50 mm","desc":"\u003c홍삼진 굿데이스틱\u003e\n 한삼인의 고농축 기술로 만들어진 홍삼농축액을 함유한 합리적 가격의 홍삼스틱 100포 상품\n 하루 1포로 진세노사이드 3mg 섭취 (100일분)\n 홍삼을 매일 섭취하시는 분들을 위한 실속형 대용량 상품\n 귀한 홍삼과 침향에 녹용, 황기, 감초, 숙지황 등의 약재를 배합\n 섭취가 용이한 스틱 형태와 고급스러운 디자인과 컬러로 가성비 좋은 상품\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/AC1A178E-2829-4B0B-A04F-0222124DB33E.jpeg","due":"2026-10-15"},{"code":"SG26040046","name":"[한삼인] 통째로 갈아 넣은 진홍삼스틱 (10g x 30포)","cat":"건강식품·홍삼","price":43780,"was":60830,"comp":"통째로 갈아 넣은 진홍삼스틱 10g x 30포, 쇼핑백","orig":"한국","tax":"과세","spec":"286 x 193 x 42 mm","desc":"\u003c통째로 갈아 넣은 진홍삼스틱\u003e\n 귀한 홍삼 원물을 그대로 갈아 진한 홍삼농축액과 함께 담아 먹었을 때 톡톡 씹히는 재미와 향미를 살린 신개념 홍삼스틱\n 정제수 없이 홍삼농축액에 홍삼, 홍삼추출액, 인삼열매를 더한 고점도의 홍삼스틱으로 인삼의 열매부터 뿌리까지 통째로 섭취하는 상품\n 천연감미료인 스테비아와 장 건강에 도움을 줄 수 있는 프락토올리고당을 30% 배합하여 홍삼의 쓴맛을 줄이고 부드러운 단맛을 더한 상품\n 1일 1포 섭취로 진세노사이드 6mg을 섭취할 수 있는 건강기능식품\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/7A67551D-0D90-4162-9BDF-8A35C6E04F94.jpeg","due":"2026-10-15"},{"code":"SG26040048","name":"[한삼인] 홍삼진 선물세트","cat":"건강식품·홍삼","price":46200,"was":64700,"comp":"홍삼진골드 50mL × 10포, 홍삼진굿데이앰플20g × 9병, 홍삼침향환골드 3.75g × 18환, 쇼핑백","orig":"한국","tax":"과세","spec":"430 x 230 x 53 mm","desc":"\u003c홍삼진 선물세트\u003e\n 한삼인의 고농축 기술로 만들어진 6년근 국산 홍삼농축액이 함유된 홍삼진굿데이앰플, 홍삼진골드, 홍삼침향환골드100 3종으로 구성된 선물세트 \n 녹용농축액이 배합된 앰플과 침향이 10% 함유된 환 그리고 진하게 농축된 홍삼이 담긴 파우치로 다양하게 구성되어 먹는 재미는 물론 생기 넘치고 활력 있는 삶을 도와주는 선물세트\n 섭취방법 : 1일 1회 1포(환)를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/1E222C2A-4DBD-4450-B1B3-7AF06C2E3B67.png","due":"2026-10-15"},{"code":"SG26040049","name":"[한삼인] 기력보감 선물세트","cat":"건강식품·홍삼","price":46200,"was":49900,"comp":"기력보감스틱 10ml x 28포, 기력보감진액 50ml x 10포, 기력보감환 3.75g x 10환, 쇼핑백","orig":"한국","tax":"과세","spec":"421 x 244 x 53 mm","desc":"\u003c기력보감 선물세트\u003e\n 6년근 홍삼으로 온가족 건강을 위한 한삼인 기력보감 선물세트\n 까다롭게 엄선한 100% 국산 6년근 홍삼 사용\n 농협홍삼의 노하우, 저온추출 감압농축 방식 사용\n 국내산 6년근 홍삼에 전통 원료를 더하여 맛과 향을 개선시킨 제품\n 기력보감 스틱, 진액, 환 3가지 구성으로 다양한 제형의 제품으로 구성된 복합 홍삼 선물세트\n 섭취방법 : 1일 1회 1포(환)를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/ADC4FEC7-9D68-4022-9EC8-509A5FFD2902.jpeg","due":"2026-10-15"},{"code":"SG26040047","name":"[한삼인] 일품홍삼 고 (240g x 1병)","cat":"건강식품·홍삼","price":46200,"was":76900,"comp":"일품홍삼 고 240g x 1병, 쇼핑백","orig":"한국","tax":"과세","spec":"81 x 72 x 116 mm","desc":"\u003c일품홍삼 고\u003e\n 6년근 홍삼농축액분말 28%에 경옥고 농축액과 배, 도라지, 벌꿀, 녹용을 더하여 피로회복 및 건강증진에 도움을 줄 수 있는 농축액 제형의 건강기능식품 입니다.\n 1일 섭취량당 진세노사이드 10mg를 섭취할 수 있는 제품 입니다.\n 홍삼은 면역력증진, 피로개선, 혈액흐름개선, 항산화, 기억력개선 등 5대 기능성이 인정되었습니다.\n 섭취방법 : 1일 1회 1스푼을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/0029F97F-6A84-46C3-8C8D-469C52BCF49D.jpeg","due":"2026-10-15"},{"code":"SG26040050","name":"[한삼인] 홍삼진 침향환골드100 (3.75g × 100환)","cat":"건강식품·홍삼","price":51040,"was":55000,"comp":"홍삼진 침향환골드 3.75g × 100환, 쇼핑백","orig":"한국","tax":"과세","spec":"346 x 246 x 71 mm","desc":"\u003c홍삼진 침향환골드\u003e\n 침향 10%가 배합 되었으며 홍삼분말, 녹용, 작약, 맥문동, 산사나무열매 등 귀한 약재가 더해진 대환류 상품\n 녹용, 진피, 대추 등 다양한 식물성 원료 함유\n 사양벌꿀 배합으로 달콤한 맛 가미\n 섭취방법 : 1일 1회 1환을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/60ECA42C-ED64-4B43-A0AD-CC3BF601511F.jpeg","due":"2026-10-15"},{"code":"SG26040059","name":"[정관장] 홍삼대정 250g","cat":"건강식품·홍삼","price":53240,"was":69900,"comp":"홍삼대정 250g x 1, 쇼핑백","orig":"한국","tax":"과세","spec":"70 X 65 X 125 mm","desc":"\u003c홍삼대정\u003e\n 6년근 홍삼을 부드럽게 추출하여 홍삼의 맛과 향을 담아냈습니다.\n 홍삼농축액 (사포닌70mg/g) 6.3%가 첨가되어있습니다.\n 홍삼 농축액 타입의 제품과 정관장 전용 케이스로 선물용으로 좋습니다.\n 120년의 전통과 기술력을 보유한 KGC 인삼공사 정관장의 엄격한 원재료 선정과 품질관리를 통해 생산됩니다.\n 이런 분들꼐 권해드립니다! : 감사의 마음을 전할 선물이 필요한 분, 공부가 힘든 수험생, 과도한 업무에 시달리는 현대인, 섭취가 간편한 제품을 찾는 분\n 섭취방법 : 1일 1회 1스푼을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/1B8C4187-4EEB-4072-95CC-0857D6288A27.png","due":"2026-10-15"},{"code":"SG26040051","name":"[한삼인] 백세홍삼골드스틱 (10mL × 60포)","cat":"건강식품·홍삼","price":55990,"was":188500,"comp":"백세홍삼골드스틱 10mL × 60포, 쇼핑백","orig":"한국","tax":"과세","spec":"253 x 334 x 37 mm","desc":"\u003c백세홍삼골드스틱\u003e\n 6년근 홍삼농축액을 함유하여 1일 1포로 진세노사이드 6 mg 섭취 가능\n 귀한 한방재료인 대추, 당귀, 천궁, 숙지황, 결명자 등을 더한 프리미엄 건강기능식품\n 식약처 인증 5대 기능성 제품 (면역력 증진, 피로 개선, 혈액흐름 개선, 항산화, 기억력 개선)\n 보관 및 섭취가 편리하고 위생적인 개별 스틱 포장 형태\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/994C3500-D2F6-4312-A776-1BBEB682117B.jpeg","due":"2026-10-15"},{"code":"SG26040052","name":"[한삼인] 산삼배양근 본 (20ml x 30병)","cat":"건강식품·홍삼","price":55990,"was":79700,"comp":"산삼배양근 본 20ml x 30병, 쇼핑백","orig":"한국","tax":"과세","spec":"289 x 351 x 33 mm","desc":"\u003c산삼배양근 본\u003e\n 6년근 국산 홍삼농축액과 산삼배양근이 조화된 홍삼제품\n 산삼배양근 생체로 제품의 품질을 높였습니다.\n 액상은 마시고, 생체는 씹으며 섭취할 수 있는 영양만점 고급세트\n 섭취방법 : 1일 1회 1병을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/05B1A1E3-0B83-4C2E-A11F-E88293BCF187.jpeg","due":"2026-10-15"},{"code":"SG26040060","name":"[정관장] 홍삼대정 (250g 1병+케이스)","cat":"건강식품·홍삼","price":56430,"was":69900,"comp":"홍삼대정 250g x 1 (정관장 케이스 포장), 쇼핑백","orig":"한국","tax":"과세","spec":"100 X 90 X 160 mm","desc":"\u003c홍삼대정\u003e\n 6년근 홍삼을 부드럽게 추출하여 홍삼의 맛과 향을 담아냈습니다.\n 홍삼농축액 (사포닌70mg/g) 6.3%가 첨가되어있습니다.\n 홍삼 농축액 타입의 제품과 정관장 전용 케이스로 선물용으로 좋습니다.\n 120년의 전통과 기술력을 보유한 KGC 인삼공사 정관장의 엄격한 원재료 선정과 품질관리를 통해 생산됩니다.\n 이런 분들꼐 권해드립니다! : 감사의 마음을 전할 선물이 필요한 분, 공부가 힘든 수험생, 과도한 업무에 시달리는 현대인, 섭취가 간편한 제품을 찾는 분\n 섭취방법 : 1일 1회 1스푼을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/49FDA676-4C0E-48C7-B616-0D0794E7D463.jpeg","due":"2026-10-15"},{"code":"SG26040053","name":"[한삼인] 홍삼본선물세트","cat":"건강식품·홍삼","price":58410,"was":101690,"comp":"산삼배양근본 20mL x 15병, 홍삼진액본 50mL x 20포, 쇼핑백","orig":"한국","tax":"과세","spec":"430 x 310 x 53 mm","desc":"\u003c홍삼본선물세트\u003e\n 산삼배양근이 든 앰플과 홍삼 파우치 제품을 함께 구성한 고급 선물세트\n 당귀, 천궁, 백작약, 숙지황, 대추, 생강을 함유한 사물농축액이 함유되어 더 풍부한 맛을 느낄 수 있는 제품\n 산삼배양근 생체가 들어있어 씹는 즐거움이 있는 제품\n 섭취방법 : 1일 1회 1포(병)를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/8B4137DC-429E-4465-80DB-86378F7A9259.jpeg","due":"2026-10-15"},{"code":"SG26040061","name":"[정관장] 홍삼보가 (50ml x 30포)","cat":"건강식품·홍삼","price":59840,"was":69000,"comp":"홍삼보가 50ml x 30포, 쇼핑백","orig":"한국","tax":"과세","spec":"367 x 354 x 50 mm","desc":"\u003c홍삼보가\u003e\n 정관장 홍삼보가는 6년근 홍삼에 녹용추출물을 담은 온가족형 홍삼제품입니다.\n 정관장에서 100% 계약재배한 6년근 홍삼을 사용하였습니다.\n 녹용 외에도 구기자, 감초, 황기 등의 전통부원료가 \u0027식물혼합농축액\u0027으로 함유되었습니다.\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/DC1C2693-91A6-48D0-8BD2-CF646A3810A8.jpg","due":"2026-10-15"},{"code":"SG26040062","name":"[정관장] 홍삼본정 데일리스틱 (10g x 30포)","cat":"건강식품·홍삼","price":64350,"was":72340,"comp":"홍삼본정 데일리스틱 10g x 30포, 쇼핑백","orig":"한국","tax":"과세","spec":"275 x 190 x 45 mm","desc":"\u003c홍삼본정 데일리스틱\u003e\n 6년근 홍삼농축액 5.75%와 숙지황, 구기자, 당귀, 복령, 대추, 천궁 등의 부원료를 더해 몸에 좋은 홍삼제품입니다.\n 작은 사이즈로 휴대가 편리하고, 섭취가 편리한 스틱형 액상 제품입니다.\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/4B5C8F95-AB9B-4A70-A5EA-929592918ED2.png","due":"2026-10-15"},{"code":"SG26040054","name":"[한삼인] 기력보황 (60mL x 30포)","cat":"건강식품·홍삼","price":75460,"was":110500,"comp":"기력보황 60mL x 30포, 쇼핑백","orig":"한국","tax":"과세","spec":"367 x 354 x 50 mm","desc":"\u003c기력보황\u003e\n 일일섭취량(1포) 기준 진세노사이드 10 mg 섭취 가능한 건강기능식품\n 스트레스와 피로에 지친 분들을 위한 부원료 타우린, 비타민C, 비타민B군 첨가로 기력 보충\n 물 대신 원기회복에 좋은 귀한 한약재 16종을 추출한 식물혼합추출물 첨가\n 남녀노소 누구나 간편하게 섭취 가능한 액상 파우치 타입\n 선물하기 좋은 부피감 있는 구성과 고급스러운 패키지로 명절 선물 추천 상품\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/73362CE1-C1E5-4B05-9216-2A0F6D814094.jpeg","due":"2026-10-15"},{"code":"SG26040055","name":"[한삼인] A클래스 (50mL × 30포)","cat":"건강식품·홍삼","price":80410,"was":100000,"comp":"A클래스 50mL × 30포, 쇼핑백","orig":"한국","tax":"과세","spec":"315 x 205 x 53 mm","desc":"\u003cA클래스\u003e\n 하루 한 포로 진세노사이드 11mg 섭취 가능\n 6년근 홍삼에 비타민B1, 비타민B6, 나이아신을 더한 청소년 맞춤 설계로 두뇌건강과 면역력 증진, 에너지를 위한 한심인 A클래스\n 황기, 마, 구기자나무열매, 삽주, 오미자 등 9가지 식물원재료 함유\n 타우린, L-테아닌을 함께 배합하여 학업 중에 오랫동안 활력 넘치도록 설계한 배합\n 기존 배합에서 눈 건강과 관련한 주원료 베타카로틴은 부원료로 배합\n 벌꿀과 과일농축액으로 달콤하게 과일음료처럼 맛있게 섭취 가능\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/A6BBED56-91B1-4518-88E1-D62656FCEB73.jpeg","due":"2026-10-15"},{"code":"SG26040056","name":"[한삼인] 화온비 (70ml x 30포)","cat":"건강식품·홍삼","price":101200,"was":138480,"comp":"화온비 70ml x 30포, 쇼핑백","orig":"한국","tax":"과세","spec":"320 x 260 x 53 mm","desc":"\u003c화온비\u003e\n 관절 및 연골 건강 기능성을 더한 여성 갱년기 제품 (‘홍삼+α’ 배합)\n 6년근 홍삼농축액 5.257% (진세노사이드 15mg/g 이상, 고형분 65%, 근:미 5:5)\n 관절 연골 건강을 위한 MSM 1,500 mg 함유\n 갱년기 여성의 건강 고민을 위한 콜라겐, 세인트존스워트, 사물농축액, 석류, 세라마이드, 복분자를 부원료로 더한 여성용 보약 컨셉의 제품\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/77D90350-A994-4CB8-8522-143CAC57A00B.png","due":"2026-10-15"},{"code":"SG26040063","name":"[정관장] 홍삼대정 2병 세트 (250g x 2병)","cat":"건강식품·홍삼","price":105050,"was":140000,"comp":"홍삼대정 250g x 2, 쇼핑백","orig":"한국","tax":"과세","spec":"230 x 150 x 80 mm","desc":"\u003c홍삼대정\u003e\n 6년근 홍삼을 부드럽게 추출하여 홍삼의 맛과 향을 담아냈습니다.\n 홍삼농축액 (사포닌70mg/g) 6.3%가 첨가되어있습니다.\n 홍삼 농축액 타입의 제품과 정관장 전용 케이스로 선물용으로 좋습니다.\n 120년의 전통과 기술력을 보유한 KGC 인삼공사 정관장의 엄격한 원재료 선정과 품질관리를 통해 생산됩니다.\n 이런 분들꼐 권해드립니다! : 감사의 마음을 전할 선물이 필요한 분, 공부가 힘든 수험생, 과도한 업무에 시달리는 현대인, 섭취가 간편한 제품을 찾는 분\n 섭취방법 : 1일 1회 1스푼을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/1F278D34-59CE-4F5A-912B-5D5DE6D936D4.jpeg","due":"2026-10-15"},{"code":"SG26040058","name":"[한삼인] 심의환 (3.8g x 24환)","cat":"건강식품·홍삼","price":137940,"was":220480,"comp":"심의환 3.8g x 24환, 쇼핑백","orig":"한국","tax":"과세","spec":"263 x 192 x 58 mm","desc":"\u003c심의환\u003e\n 6년근 국산 홍삼에 침향, 벌꿀 등의 귀한 재료를 정성스럽게 빚은 홍삼제품\n 1일 섭취로 진세노사이드 Rg1, Rb1 및 Rg3의 합으로써 3.2 mg/3.8 g을 섭취할 수 있는 제품\n 바쁜 직장인, 집중력이 필요한 수험생 자녀에게 더욱 좋은 홍삼제품\n 섭취하기 편하고 쉽게 위생적인 개별 포장으로 되어있는 제품\n 소중한 분께 감사의 마음을 전하기에 손색없는 고급 선물용으로 좋은 제품\n 섭취방법 : 1일 1회 1환을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/327E53AD-3EBB-4A42-B54C-ADAFD6FA7B9E.jpeg","due":"2026-10-15"},{"code":"SG26040057","name":"[한삼인] 기력보황 (60mL x 60포)","cat":"건강식품·홍삼","price":137940,"was":220000,"comp":"기력보황 60mL x 60포, 쇼핑백","orig":"한국","tax":"과세","spec":"367 x 354 x 100 mm","desc":"\u003c기력보황\u003e\n 일일섭취량(1포) 기준 진세노사이드 10mg 섭취 가능한 건강기능식품\n 스트레스와 피로에 지친 분들을 위한 부원료 타우린, 비타민C, 비타민B군 첨가로 기력 보충\n 물 대신 원기회복에 좋은 귀한 한약재 16종을 추출한 식물혼합추출물 첨가\n 남녀노소 누구나 간편하게 섭취 가능한 액상 파우치 타입\n 선물하기 좋은 부피감 있는 구성과 고급스러운 패키지로 명절 선물 추천 상품\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/62FB121B-1523-4F1D-B2BB-14933299BE10.jpeg","due":"2026-10-15"},{"code":"SG26040064","name":"[정관장] 홍삼본정 (250g x 3병)","cat":"건강식품·홍삼","price":145750,"was":198000,"comp":"홍삼본정 250g x 3, 쇼핑백","orig":"한국","tax":"과세","spec":"255 x 145 x 80 mm","desc":"\u003c홍삼본정\u003e\n 정관장 홍삼본정은 100년 전통의 노하우와 정성을 담은 홍삼의 정수입니다.\n 홍삼농축액 (사포닌70mg/g) 5.75%가 첨가되어있습니다.\n 정관장에서 100% 계약재배된 6년근 수삼으로 만든 홍삼만을 엄선하였습니다.\n 선물용쇼핑백이 증정되어 고마운분, 감사를 표할분께 선물로 좋습니다.\n 홍삼의 쓴맛을 줄인 배합으로 홍삼을 처음 접하는 분들도 쉽게 섭취하실 수 있는 제품입니다.\n 섭취방법 : 1일 1회 1스푼을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/C5BB8B2F-C044-4F86-AB16-6683EC04E78C.jpeg","due":"2026-10-15"},{"code":"SG26040065","name":"[정관장] 홍삼대정 3병 세트 (250g x 3병)","cat":"건강식품·홍삼","price":149490,"was":207630,"comp":"홍삼대정 250g x 3, 쇼핑백","orig":"한국","tax":"과세","spec":"255 x 145 x 80 mm","desc":"\u003c홍삼대정\u003e\n 6년근 홍삼을 부드럽게 추출하여 홍삼의 맛과 향을 담아냈습니다.\n 홍삼농축액 (사포닌70mg/g) 6.3%이 첨가되어있습니다.\n 홍삼 농축액 타입의 제품과 정관장 전용 케이스로 선물용으로 좋습니다.\n 120년의 전통과 기술력을 보유한 KGC 인삼공사 정관장의 엄격한 원재료 선정과 품질관리를 통해 생산됩니다.\n 이런 분들꼐 권해드립니다! : 감사의 마음을 전할 선물이 필요한 분, 공부가 힘든 수험생, 과도한 업무에 시달리는 현대인, 섭취가 간편한 제품을 찾는 분\n 섭취방법 : 1일 1회 1스푼을 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/6179D662-FB7A-4392-9BC2-D7F5738A297B.jpeg","due":"2026-10-15"},{"code":"SG26040066","name":"[정관장] 장생기보 (70ml x 30포)","cat":"건강식품·홍삼","price":163900,"was":265000,"comp":"장생기보 70ML x 30포, 쇼핑백","orig":"한국","tax":"과세","spec":"348 x 207 x 109 mm","desc":"\u003c장생기보\u003e\n 정관장 노하우로 재배한 6년근 홍삼을 기본으로 정관장이 엄선한 부원료 8종을 넣어 만든 건강기능식품 입니다. (영지버섯, 상황버섯, 숙지황, 복령, 맥문동, 지황, 진피, 황정, 배 / 매실)\n 토양 선정부터 수확까지 모든 과정을 직접 관리하며 100% 계약재배를 통해 엄격히 생산된 6년근 인삼만을 사용했습니다.\n 꾸준한 체력 또는 기력 관리가 필요하신 분, 기억력 개선이 필요하신 분께 효과적입니다.\n 섭취방법 : 1일 1회 1포를 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/5B2663DA-B18C-47D8-B10E-8ADB5E58F836.jpg","due":"2026-10-15"},{"code":"SG26040067","name":"[정관장] 홍삼원기환 (3.75g x 30환)","cat":"건강식품·홍삼","price":181500,"was":370090,"comp":"홍삼원기환 3.75g x 30환, 쇼핑백","orig":"한국","tax":"과세","spec":"140 x 222 x 94 mm","desc":"\u003c홍삼원기환\u003e\n 정관장 노하우로 재배한 6년근 홍삼을 기본으로 정관장이 엄선한 부원료 8종을 넣어 만든 건강기능식품 입니다. (산수유, 노루궁뎅이버섯, 숙지황, 복령, 맥문동, 지황, 진피, 황정)\n 토양 선정부터 수확까지 모든 과정을 직접 관리하며 100% 계약재배를 통해 엄격히 생산된 6년근 인삼만을 사용했습니다.\n 피로개선, 면역력증진, 기억력개선, 혈소판응집억제, 항산화에 도움을 줄 수 있습니다.\n 섭취방법 : 1일 1회 1환을 씹어서 섭취하십시오","img":"https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/EC2D3C6D-174D-4227-88BC-8068F2D7C6CC.jpeg","due":"2026-10-15"}];
+const CFG  = {"dueOfficial":"2026-09-11","contactEmail":"yeonhyeon@vendys.co.kr","season":"2026 추석","submitUrl":"","buildDate":"2026-07-27","bands":[{"k":"b01","label":"1~3만원","min":0,"max":30000},{"k":"b02","label":"3~4만원","min":30000,"max":40000},{"k":"b03","label":"4~5만원","min":40000,"max":50000},{"k":"b04","label":"5~6만원","min":50000,"max":60000},{"k":"b05","label":"6~7만원","min":60000,"max":70000},{"k":"b06","label":"7~8만원","min":70000,"max":80000},{"k":"b07","label":"8~9만원","min":80000,"max":90000},{"k":"b08","label":"9~10만원","min":90000,"max":100000},{"k":"b09","label":"10~15만원","min":100000,"max":150000},{"k":"b10","label":"15~20만원","min":150000,"max":200000},{"k":"b11","label":"20만원 이상","min":200000,"max":Infinity}],"cats":["가공식품·통조림·오일","건강식품·홍삼"]};
+
+/* ── 유틸 ───────────────────────────── */
+const $ = id => document.getElementById(id);
+const won = n => n.toLocaleString('ko-KR') + '원';
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rate = p => (p.was > p.price && p.price > 0) ? Math.round((1 - p.price / p.was) * 100) : 0;
+const dday = iso => Math.ceil((new Date(iso + 'T23:59:59') - new Date()) / 86400000);
+
+/* ── 상태 ───────────────────────────── */
+const st = { tab: 'price', chip: '__all__', q: '', sort: 'def', view: 'card', onlySel: false };
+const sel = new Map();   // code -> qty(숫자 또는 null)
+const PANEL_BODY = document.querySelector('.p-body').innerHTML;   // 접수 완료 후 되돌리기용 원본
+
+/* ── 마감 배너 : 공식 주문 마감만 노출 ── */
+(function banner() {
+  const b = $('dbanner'), d = dday(CFG.dueOfficial);
+  if (d > 0) {
+    b.innerHTML = '🎁 <b>공식 주문 마감</b><span class="dd">D-' + d + '</span>' + CFG.dueOfficial + ' 까지';
+  } else if (d === 0) {
+    b.className = 'dbanner urgent';
+    b.innerHTML = '⚠️ <b>오늘이 공식 주문 마감일입니다</b><span class="dd">D-DAY</span>' + CFG.dueOfficial;
+  } else {
+    b.className = 'dbanner closed';
+    b.innerHTML = '공식 주문 마감(' + CFG.dueOfficial + ')이 지났습니다 — 접수 가능 여부는 담당자에게 문의해 주세요.';
+  }
+})();
+
+/* ── 그룹 정의 ──────────────────────── */
+const inBand = (p, b) => p.price >= b.min && p.price < b.max;
+function groups() {
+  return st.tab === 'price'
+    ? CFG.bands.map(b => ({ k: b.k, label: b.label, n: DATA.filter(p => inBand(p, b)).length }))
+    : CFG.cats.map(c => ({ k: c, label: c, n: DATA.filter(p => p.cat === c).length }));
+}
+function buildChips() {
+  const gs = groups();
+  $('chips').innerHTML = '<button class="chip' + (st.chip === '__all__' ? ' on' : '') + '" data-k="__all__">전체<span class="c">'
+    + DATA.length + '</span></button>'
+    + gs.map(g => '<button class="chip' + (st.chip === g.k ? ' on' : '') + '" data-k="' + esc(g.k) + '"'
+        + (g.n ? '' : ' disabled') + '>' + esc(g.label) + '<span class="c">' + g.n + '</span></button>').join('');
+}
+
+/* ── 필터 ───────────────────────────── */
+function filtered() {
+  const q = st.q.trim().toLowerCase();
+  let list = DATA.filter(p => {
+    if (st.onlySel && !sel.has(p.code)) return false;
+    if (q && !(p.name + ' ' + p.code + ' ' + p.comp + ' ' + p.cat + ' ' + p.desc).toLowerCase().includes(q)) return false;
+    if (st.chip !== '__all__') {
+      if (st.tab === 'price') { const b = CFG.bands.find(x => x.k === st.chip); if (!b || !inBand(p, b)) return false; }
+      else if (p.cat !== st.chip) return false;
+    }
+    return true;
+  });
+  const s = st.sort;
+  if (s === 'pl') list.sort((a, b) => a.price - b.price);
+  else if (s === 'ph') list.sort((a, b) => b.price - a.price);
+  else if (s === 'rt') list.sort((a, b) => rate(b) - rate(a) || a.price - b.price);
+  else if (s === 'nm') list.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+  return list;
+}
+
+/* ── 가격 표기 ──────────────────────── */
+function priceCard(p) {
+  const r = rate(p);
+  return '<div class="pprice"><span class="now">' + p.price.toLocaleString('ko-KR') + '<small>원</small></span>'
+    + (r ? '<span class="rate">' + r + '%↓</span><span class="was">' + p.was.toLocaleString('ko-KR') + '원</span>' : '')
+    + '</div>';
+}
+
+/* ── 렌더 ───────────────────────────── */
+function render() {
+  const list = filtered();
+  $('cnt').textContent = list.length;
+  $('cntSub').textContent = '(전체 ' + DATA.length + '개 중' + (st.q ? ' · 검색' : '') + (st.onlySel ? ' · 선택만' : '') + ')';
+  const v = $('view');
+  if (!list.length) { v.innerHTML = '<div class="empty">조건에 맞는 상품이 없습니다.<br>다른 그룹이나 검색어를 선택해 보세요.</div>'; return; }
+  v.innerHTML = st.view === 'card' ? cardHtml(list) : listHtml(list);
+}
+function cardHtml(list) {
+  return '<div class="grid">' + list.map(p => {
+    const on = sel.has(p.code);
+    return '<article class="pcard' + (on ? ' sel' : '') + '" data-code="' + p.code + '">'
+      + '<input type="checkbox" class="pick" data-pick="' + p.code + '"' + (on ? ' checked' : '') + ' aria-label="선택">'
+      + '<div class="thumb" data-open="' + p.code + '"><img src="' + esc(p.img) + '" alt="' + esc(p.name) + '" loading="lazy"></div>'
+      + '<div class="pbody">'
+      + '<div class="prow1"><span class="tag cat">' + esc(p.cat) + '</span><span class="tag tax">' + esc(p.tax) + '</span></div>'
+      + '<div class="pname" data-open="' + p.code + '">' + esc(p.name) + '</div>'
+      + '<div class="pmeta"><span class="tag code">' + esc(p.code) + '</span></div>'
+      + '<div class="pmeta pcomp"><b>구성</b> ' + esc(p.comp) + '</div>'
+      + '<div class="pmeta"><b>원산지</b> ' + esc(p.orig || '-') + '</div>'
+      + '<div class="pdesc">' + esc(p.desc.slice(0, 110)) + (p.desc.length > 110 ? '… <a data-open="' + p.code + '">더보기</a>' : '') + '</div>'
+      + priceCard(p)
+      + '</div></article>';
+  }).join('') + '</div>';
+}
+function listHtml(list) {
+  return '<div class="tblwrap"><table class="list"><thead><tr>'
+    + '<th><input type="checkbox" id="allChk"></th><th>이미지</th><th>상품코드</th><th>카테고리</th><th>상품명</th>'
+    + '<th>구성</th><th>상세설명</th><th>원산지</th><th>과세여부</th><th style="text-align:right">가격</th>'
+    + '</tr></thead><tbody>'
+    + list.map(p => {
+      const on = sel.has(p.code), r = rate(p);
+      return '<tr class="' + (on ? 'sel' : '') + '" data-code="' + p.code + '">'
+        + '<td><input type="checkbox" data-pick="' + p.code + '"' + (on ? ' checked' : '') + '></td>'
+        + '<td><img src="' + esc(p.img) + '" alt="" loading="lazy" data-open="' + p.code + '"></td>'
+        + '<td class="c-code">' + esc(p.code) + '</td>'
+        + '<td><span class="tag cat">' + esc(p.cat) + '</span></td>'
+        + '<td class="c-name" data-open="' + p.code + '">' + esc(p.name) + '</td>'
+        + '<td class="c-comp">' + esc(p.comp) + '</td>'
+        + '<td class="c-desc"><div class="cut">' + esc(p.desc) + '</div>'
+          + (p.desc.length > 90 ? '<a data-open="' + p.code + '">더보기</a>' : '') + '</td>'
+        + '<td>' + esc(p.orig || '-') + '</td>'
+        + '<td><span class="tag tax">' + esc(p.tax) + '</span></td>'
+        + '<td class="c-price money"><span class="now">' + p.price.toLocaleString('ko-KR') + '원</span>'
+          + (r ? '<span class="rate">' + r + '%↓</span><span class="was">' + p.was.toLocaleString('ko-KR') + '원</span>' : '')
+        + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+}
+
+/* ── 상세 모달 ──────────────────────── */
+function openModal(code) {
+  const p = DATA.find(x => x.code === code); if (!p) return;
+  const r = rate(p), on = sel.has(code);
+  $('modal').innerHTML = '<button class="x" id="mX">&times;</button><div class="m-top">'
+    + '<div class="m-img"><img src="' + esc(p.img) + '" alt="' + esc(p.name) + '"></div><div>'
+    + '<div class="prow1"><span class="tag cat">' + esc(p.cat) + '</span><span class="tag tax">' + esc(p.tax) + '</span>'
+      + '<span class="tag code">' + esc(p.code) + '</span></div>'
+    + '<div class="m-name">' + esc(p.name) + '</div>'
+    + '<div class="m-price"><span class="now">' + p.price.toLocaleString('ko-KR') + '원</span>'
+      + (r ? '<span class="rate">' + r + '%↓</span><span class="was">' + p.was.toLocaleString('ko-KR') + '원</span>' : '') + '</div>'
+    + '<table class="m-tbl">'
+      + '<tr><th>구성</th><td>' + esc(p.comp) + '</td></tr>'
+      + (p.spec ? '<tr><th>규격</th><td>' + esc(p.spec) + '</td></tr>' : '')
+      + '<tr><th>원산지</th><td>' + esc(p.orig || '-') + '</td></tr>'
+      + '<tr><th>과세여부</th><td>' + esc(p.tax) + '</td></tr>'
+      + '<tr><th>상품코드</th><td>' + esc(p.code) + '</td></tr>'
+      + '<tr><th>판매마감</th><td>' + esc(p.due || '-') + '</td></tr>'
+    + '</table>'
+    + '<button class="btn primary" data-pick="' + p.code + '" data-btn="1" style="padding:10px 20px;font-size:14px">'
+      + (on ? '선택됨 ✓ (해제하기)' : '이 상품 선택하기') + '</button>'
+    + '</div></div>'
+    + (p.desc ? '<div class="m-desc"><h4>상세설명</h4>' + esc(p.desc) + '</div>' : '');
+  $('mbg').classList.add('open'); document.body.style.overflow = 'hidden';
+}
+const closeModal = () => { $('mbg').classList.remove('open'); document.body.style.overflow = ''; };
+
+/* ── 선택 ───────────────────────────── */
+/* silent=true 면 syncSel()을 건너뛴다 — 전체선택처럼 여러 건을 한 번에 바꿀 때,
+   루프 도중 syncSel()이 체크박스 상태를 되돌려 첫 건만 반영되는 문제를 막는다. */
+function toggle(code, force, silent) {
+  const on = force != null ? force : !sel.has(code);
+  if (on) { if (!sel.has(code)) sel.set(code, null); } else sel.delete(code);
+  if (!silent) syncSel();
+}
+function syncSel() {
+  const n = sel.size;
+  const rows = selRows();
+  const tot = rows.reduce((s, r) => s + (r.qty ? r.qty * r.p.price : 0), 0);
+  const qty = rows.reduce((s, r) => s + (r.qty || 0), 0);
+
+  $('sbN').textContent = n;
+  $('sbTot').textContent = qty ? won(tot) : '수량 미입력';
+  $('selbar').classList.toggle('show', n > 0);
+  $('onlySel').textContent = '선택한 상품만 보기 (' + n + ')';
+  $('onlySel').disabled = !n; $('clearSel').disabled = !n;
+  $('ftN').textContent = n + '개'; $('ftQ').textContent = qty.toLocaleString('ko-KR') + '개';
+  $('ftTot').textContent = qty ? won(tot) : '수량 입력 시 자동 계산';
+
+  document.querySelectorAll('[data-pick]').forEach(el => {
+    const on = sel.has(el.dataset.pick);
+    if (el.type === 'checkbox') el.checked = on;
+    else if (el.dataset.btn) el.textContent = on ? '선택됨 ✓ (해제하기)' : '이 상품 선택하기';
+  });
+  document.querySelectorAll('.pcard[data-code],table.list tr[data-code]').forEach(el =>
+    el.classList.toggle('sel', sel.has(el.dataset.code)));
+  const all = $('allChk');
+  if (all) { const vis = [...document.querySelectorAll('table.list tr[data-code]')]; all.checked = vis.length > 0 && vis.every(t => sel.has(t.dataset.code)); }
+  if (st.onlySel && !n) { st.onlySel = false; $('onlySel').classList.remove('on'); render(); }
+  renderQt();
+}
+const selRows = () => [...sel.entries()].map(([code, qty]) => ({ p: DATA.find(x => x.code === code), qty }));
+
+/* ── 문의 표 ────────────────────────── */
+function renderQt() {
+  const rows = selRows();
+  $('qt').innerHTML = !rows.length
+    ? '<tr><td style="padding:44px;text-align:center;color:var(--ink-3)">선택한 상품이 없습니다.</td></tr>'
+    : '<thead><tr><th colspan="2">상품</th><th class="num money">단가</th><th style="text-align:center">수량</th>'
+      + '<th class="num money">금액</th><th></th></tr></thead><tbody>'
+      + rows.map(r => '<tr><td style="width:52px"><img src="' + esc(r.p.img) + '" alt=""></td>'
+        + '<td><div class="nm">' + esc(r.p.name) + '</div><div class="cd">' + esc(r.p.code) + ' · ' + esc(r.p.cat) + '</div></td>'
+        + '<td class="num money">' + won(r.p.price) + '</td>'
+        + '<td style="text-align:center"><input class="q" type="number" min="1" placeholder="-" '
+          + 'value="' + (r.qty || '') + '" data-qty="' + r.p.code + '"></td>'
+        + '<td class="num money">' + (r.qty ? won(r.qty * r.p.price) : '-') + '</td>'
+        + '<td><button class="del" data-rm="' + r.p.code + '" title="삭제">&times;</button></td></tr>').join('')
+      + '</tbody>';
+}
+
+/* ── 내보내기 ───────────────────────── */
+const form = () => ({ co: $('fCo').value.trim(), nm: $('fName').value.trim(), tel: $('fTel').value.trim(), date: $('fDate').value.trim() });
+function csvCell(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }
+function exportCsv() {
+  const rows = selRows(); if (!rows.length) return toast('선택한 상품이 없습니다.');
+  const f = form();
+  const head = ['상품코드', '카테고리', '상품명', '구성', '원산지', '과세여부', '단가(부가세포함)', '수량', '금액'];
+  const body = rows.map(r => [r.p.code, r.p.cat, r.p.name, r.p.comp, r.p.orig, r.p.tax, r.p.price, r.qty || '', r.qty ? r.qty * r.p.price : '']);
+  const qty = rows.reduce((s, r) => s + (r.qty || 0), 0);
+  const tot = rows.reduce((s, r) => s + (r.qty ? r.qty * r.p.price : 0), 0);
+  body.push(['', '', '합계', '', '', '', '', qty, tot]);
+  const meta = [['2026 추석 단체선물대장 선택상품 문의서'], ['고객사', f.co], ['담당자', f.nm], ['연락처', f.tel],
+                ['희망 배송일', f.date], ['공식 주문 마감', CFG.dueOfficial], []];
+  const csv = '﻿' + [...meta, head, ...body].map(r => r.map(csvCell).join(',')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+  a.download = '2026추석_선택상품_문의서' + (f.co ? '_' + f.co : '') + '.csv';
+  a.click(); URL.revokeObjectURL(a.href);
+  toast('엑셀(CSV) 파일을 내려받았습니다.');
+}
+function buildPrint() {
+  const rows = selRows(), f = form();
+  const qty = rows.reduce((s, r) => s + (r.qty || 0), 0);
+  const tot = rows.reduce((s, r) => s + (r.qty ? r.qty * r.p.price : 0), 0);
+  $('printArea').innerHTML = '<h2>2026 추석 단체선물대장 · 선택상품 문의서</h2>'
+    + '<div class="pmeta">'
+      + (f.co ? '고객사 ' + esc(f.co) + ' · ' : '') + (f.nm ? '담당자 ' + esc(f.nm) + ' · ' : '')
+      + (f.tel ? '연락처 ' + esc(f.tel) + ' · ' : '') + (f.date ? '희망 배송일 ' + esc(f.date) + ' · ' : '')
+      + '공식 주문 마감 ' + CFG.dueOfficial + '</div>'
+    + '<table><thead><tr><th>이미지</th><th>상품코드</th><th>카테고리</th><th>상품명</th><th>구성</th>'
+      + '<th>원산지</th><th>과세</th><th class="num">단가</th><th class="num">수량</th><th class="num">금액</th></tr></thead><tbody>'
+    + rows.map(r => '<tr><td><img src="' + esc(r.p.img) + '" alt=""></td><td>' + esc(r.p.code) + '</td>'
+        + '<td>' + esc(r.p.cat) + '</td><td>' + esc(r.p.name) + '</td><td>' + esc(r.p.comp) + '</td>'
+        + '<td>' + esc(r.p.orig || '-') + '</td><td>' + esc(r.p.tax) + '</td>'
+        + '<td class="num">' + won(r.p.price) + '</td><td class="num">' + (r.qty || '-') + '</td>'
+        + '<td class="num">' + (r.qty ? won(r.qty * r.p.price) : '-') + '</td></tr>').join('')
+    + '<tr class="tot"><td colspan="8">합계</td><td class="num">' + qty + '</td><td class="num">' + won(tot) + '</td></tr>'
+    + '</tbody></table>'
+    + '<div class="note">· 표시 금액은 부가세 포함 공급가이며 배송비는 별도입니다.<br>'
+      + '· 재고·가격은 매입처 사정에 따라 변동될 수 있으며, 최종 금액은 견적서로 확정됩니다.<br>'
+      + '· 문의 ' + esc(CFG.contactEmail) + '</div>';
+}
+function toMailto() {
+  const rows = selRows(); if (!rows.length) return toast('선택한 상품이 없습니다.');
+  const f = form();
+  const qty = rows.reduce((s, r) => s + (r.qty || 0), 0);
+  const tot = rows.reduce((s, r) => s + (r.qty ? r.qty * r.p.price : 0), 0);
+  const body = '[2026 추석 단체선물대장 선택상품 문의]\n\n'
+    + '고객사: ' + (f.co || '') + '\n담당자: ' + (f.nm || '') + '\n연락처: ' + (f.tel || '')
+    + '\n희망 배송일: ' + (f.date || '') + '\n\n'
+    + rows.map((r, i) => (i + 1) + '. [' + r.p.code + '] ' + r.p.name
+        + '\n   ' + won(r.p.price) + ' × ' + (r.qty || '수량 미정') + (r.qty ? ' = ' + won(r.qty * r.p.price) : '')).join('\n')
+    + '\n\n총 ' + rows.length + '개 상품' + (qty ? ' · ' + qty + '개 · 합계 ' + won(tot) : '')
+    + '\n(부가세 포함, 배송비 별도)';
+  location.href = 'mailto:' + CFG.contactEmail + '?subject='
+    + encodeURIComponent('[단체선물대장] 2026 추석 상품 문의' + (f.co ? ' - ' + f.co : '')) + '&body=' + encodeURIComponent(body);
+}
+function copyList() {
+  const rows = selRows(); if (!rows.length) return toast('선택한 상품이 없습니다.');
+  const qty = rows.reduce((s, r) => s + (r.qty || 0), 0);
+  const tot = rows.reduce((s, r) => s + (r.qty ? r.qty * r.p.price : 0), 0);
+  const txt = '[2026 추석 단체선물대장 선택상품]\n'
+    + rows.map((r, i) => (i + 1) + '. [' + r.p.code + '] ' + r.p.name + ' / ' + won(r.p.price)
+        + (r.qty ? ' × ' + r.qty + '개 = ' + won(r.qty * r.p.price) : '')).join('\n')
+    + (qty ? '\n합계 ' + won(tot) + ' (부가세 포함, 배송비 별도)' : '');
+  navigator.clipboard.writeText(txt).then(() => toast('선택목록을 복사했습니다.'), () => toast('복사 실패 — CSV를 이용해 주세요.'));
+}
+function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 1800); }
+
+/* ── 문의 접수 (구글시트 적재) ──────────────────
+   CFG.submitUrl = Apps Script 웹 앱 URL. 비어 있으면 접수 버튼을 숨기고 메일 안내로 대체한다. */
+function inquiryId() {
+  const d = new Date(), p = n => String(n).padStart(2, '0');
+  return 'Q' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds())
+    + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+}
+function validate() {
+  const need = [['fCo', 'rqCo'], ['fName', 'rqName'], ['fTel', 'rqTel']];
+  let bad = null;
+  need.forEach(([i]) => {
+    const el = $(i), empty = !el.value.trim();
+    el.classList.toggle('bad', empty);
+    if (empty && !bad) bad = el;
+  });
+  if (bad) { bad.focus(); toast('고객사명 · 담당자 · 연락처는 필수입니다.'); return false; }
+  return true;
+}
+function payload() {
+  const rows = selRows(), f = form();
+  return {
+    inquiryId: inquiryId(),
+    submittedAt: new Date().toISOString(),
+    company: f.co, contact: f.nm, phone: f.tel, wishDate: f.date,
+    source: '웹카탈로그', season: CFG.season,
+    dueOfficial: CFG.dueOfficial,
+    itemCount: rows.length,
+    totalQty: rows.reduce((s, r) => s + (r.qty || 0), 0),
+    totalAmount: rows.reduce((s, r) => s + (r.qty ? r.qty * r.p.price : 0), 0),
+    items: rows.map(r => ({
+      code: r.p.code, name: r.p.name, cat: r.p.cat, tax: r.p.tax,
+      price: r.p.price, qty: r.qty || '', amount: r.qty ? r.qty * r.p.price : ''
+    }))
+  };
+}
+function showSent(kind, id, msg, title) {
+  const cls = kind === 'ok' ? '' : (kind === 'warn' ? ' warn' : ' fail');
+  const ico = kind === 'ok' ? '✅' : (kind === 'warn' ? '📨' : '⚠️');
+  const ttl = title || (kind === 'ok' ? '문의가 접수되었습니다' : (kind === 'warn' ? '문의를 전송했습니다' : '전송에 실패했습니다'));
+  document.querySelector('.p-body').innerHTML =
+    '<div class="sent' + cls + '"><div class="ico">' + ico + '</div><h4>' + ttl + '</h4>'
+    + '<p>' + msg + '</p>'
+    + (id ? '<div class="rid">접수번호 ' + esc(id) + '</div>' : '')
+    + '<p style="margin-top:14px"><button class="btn" id="bAgain">다른 상품 더 담기</button></p></div>';
+  document.querySelector('.p-ft').style.display = 'none';
+}
+async function submitInquiry() {
+  if (!sel.size) return toast('선택한 상품이 없습니다.');
+  if (!validate()) return;
+  const btn = $('bSend'), data = payload(), body = JSON.stringify(data);
+  btn.disabled = true; btn.textContent = '전송 중…';
+
+  // 실패 화면에서도 CSV·PDF로 내보낼 수 있도록 하단 버튼을 되살린다.
+  const fallback = () => { document.querySelector('.p-ft').style.display = ''; $('bSend').style.display = 'none'; };
+
+  let ack = null;   // 서버 응답을 실제로 읽었을 때만 채워진다
+  try {
+    // Content-Type을 지정하지 않아야 preflight 없이 Apps Script가 응답을 돌려준다.
+    const res = await fetch(CFG.submitUrl, { method: 'POST', body: body });
+    ack = await res.json();
+  } catch (e) { /* 응답을 못 읽음 — 아래에서 no-cors로 재시도 */ }
+
+  try {
+    if (ack) {
+      // 응답을 받았다면 그 판정을 그대로 따른다. 서버가 거부한 건은 재전송하지 않는다.
+      if (ack.ok) {
+        showSent('ok', ack.inquiryId || data.inquiryId,
+          '담당자가 확인 후 <b>영업일 기준 1일 이내</b>에 견적서로 회신드립니다.<br>접수번호를 남겨 두시면 진행 상황을 조회하실 수 있습니다.');
+      } else {
+        showSent('fail', null, esc(ack.error || '알 수 없는 오류')
+          + '<br>입력값을 확인하시거나 <b>엑셀(CSV)</b>로 내려받아 ' + esc(CFG.contactEmail) + ' 로 보내주세요.',
+          '접수가 반려되었습니다');
+        fallback();
+      }
+    } else {
+      // 로컬 파일·사내 프록시 등 응답을 읽을 수 없는 환경 — 전송만 시도하고 결과는 단정하지 않는다.
+      await fetch(CFG.submitUrl, { method: 'POST', mode: 'no-cors', body: body });
+      showSent('warn', data.inquiryId,
+        '전송은 되었으나 접수 확인 응답을 받지 못했습니다.<br>확실히 하시려면 아래 <b>엑셀(CSV)</b>을 내려받아 '
+        + esc(CFG.contactEmail) + ' 로도 보내주세요.');
+      fallback();
+    }
+  } catch (e) {
+    showSent('fail', null,
+      '네트워크 문제로 접수하지 못했습니다.<br><b>엑셀(CSV)</b> 또는 <b>PDF</b>로 내려받아 '
+      + esc(CFG.contactEmail) + ' 로 보내주세요.');
+    fallback();
+  } finally {
+    btn.disabled = false; btn.textContent = '문의 접수하기';
+  }
+}
+function resetPanel() {
+  document.querySelector('.p-body').innerHTML = PANEL_BODY;
+  document.querySelector('.p-ft').style.display = '';
+  $('bSend').style.display = '';
+  sel.clear(); render(); syncSel();
+  closePanel();
+}
+
+/* ── 이벤트 ─────────────────────────── */
+document.addEventListener('click', e => {
+  const t = e.target;
+  if (t.id === 'mX' || t.id === 'mbg') return closeModal();
+  if (t.dataset.pick) { toggle(t.dataset.pick, t.type === 'checkbox' ? t.checked : undefined); return; }
+  if (t.id === 'allChk') {
+    const on = t.checked;   // 루프 중 t.checked가 바뀌므로 미리 확정
+    document.querySelectorAll('table.list tr[data-code]').forEach(tr => toggle(tr.dataset.code, on, true));
+    syncSel();
+    return;
+  }
+  if (t.dataset.rm) { toggle(t.dataset.rm, false); return; }
+  const op = t.closest('[data-open]'); if (op) return openModal(op.dataset.open);
+  const chip = t.closest('#chips .chip');
+  if (chip && !chip.disabled) { st.chip = chip.dataset.k; buildChips(); render(); return; }
+  const tab = t.closest('.tabs button');
+  if (tab) { st.tab = tab.dataset.tab; st.chip = '__all__';
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b === tab)); buildChips(); render(); return; }
+  const vw = t.closest('.viewtog button');
+  if (vw) { st.view = vw.dataset.view;
+    document.querySelectorAll('.viewtog button').forEach(b => b.classList.toggle('on', b === vw)); render(); syncSel(); return; }
+});
+document.addEventListener('input', e => {
+  const c = e.target.dataset.qty;
+  if (c) { const v = parseInt(e.target.value, 10); sel.set(c, v > 0 ? v : null);
+    const rows = selRows();
+    const qty = rows.reduce((s, r) => s + (r.qty || 0), 0), tot = rows.reduce((s, r) => s + (r.qty ? r.qty * r.p.price : 0), 0);
+    $('sbTot').textContent = qty ? won(tot) : '수량 미입력';
+    $('ftQ').textContent = qty.toLocaleString('ko-KR') + '개';
+    $('ftTot').textContent = qty ? won(tot) : '수량 입력 시 자동 계산';
+    const cell = e.target.closest('tr').querySelectorAll('.num')[1];
+    if (cell) cell.textContent = v > 0 ? won(v * DATA.find(x => x.code === c).price) : '-';
+  }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closePanel(); } });
+
+$('q').oninput = e => { st.q = e.target.value; render(); syncSel(); };
+$('sort').onchange = e => { st.sort = e.target.value; render(); syncSel(); };
+$('noMoney').onchange = e => document.body.classList.toggle('nomoney', e.target.checked);
+$('onlySel').onclick = () => { st.onlySel = !st.onlySel; $('onlySel').classList.toggle('on', st.onlySel); render(); syncSel(); };
+$('clearSel').onclick = $('sbClear').onclick = () => { if (sel.size && confirm('선택을 모두 해제할까요?')) { sel.clear(); syncSel(); render(); } };
+
+const openPanel = () => { $('panel').classList.add('open'); $('pbg').classList.add('open'); document.body.style.overflow = 'hidden'; };
+const closePanel = () => { $('panel').classList.remove('open'); $('pbg').classList.remove('open'); document.body.style.overflow = ''; };
+$('sbOpen').onclick = openPanel; $('pClose').onclick = closePanel; $('pbg').onclick = closePanel;
+$('bXls').onclick = exportCsv; $('bCopy').onclick = copyList; $('bMail').onclick = toMailto;
+$('bSend').onclick = submitInquiry;
+document.addEventListener('click', e => { if (e.target.id === 'bAgain') resetPanel(); });
+$('bPdf').onclick = () => { if (!sel.size) return toast('선택한 상품이 없습니다.'); buildPrint(); window.print(); };
+
+/* ── 초기화 ─────────────────────────── */
+(function init() {
+  const prices = DATA.map(p => p.price);
+  $('hdSub').textContent = '확정 큐레이션 ' + DATA.length + '개 · '
+    + Math.min(...prices).toLocaleString('ko-KR') + '~' + Math.max(...prices).toLocaleString('ko-KR') + '원';
+  $('footDue').innerHTML = '<b>공식 주문 마감</b> ' + CFG.dueOfficial
+    + ' — 마감일까지 접수된 건에 한해 명절 전 배송이 보장됩니다.';
+  $('footBuild').textContent = '문의 ' + CFG.contactEmail + ' | 데이터 기준 ' + CFG.buildDate
+    + ' (활성 상품만 게시) | 본 카탈로그는 고객사 제안용 자료입니다.';
+  if (CFG.submitUrl) {
+    $('pNote').innerHTML = '‘문의 접수하기’를 누르면 담당자에게 <b>바로 접수</b>되고 접수번호가 발급됩니다.<br>'
+      + '수량은 비워두셔도 접수 가능합니다 — 담당자가 확인 후 견적서로 회신드립니다.<br>'
+      + '내부 결재용으로 필요하시면 <b>엑셀(CSV)</b>·<b>PDF 저장</b>도 함께 이용하세요.';
+  } else {
+    // 접수 서버(Apps Script) 미설정 상태 — 메일 접수로 대체
+    $('bSend').style.display = 'none';
+    $('bMail').classList.add('primary'); $('bMail').style.flex = '1 1 100%';
+    $('pNote').innerHTML = '‘메일로 보내기’는 기본 메일 프로그램을 엽니다. 사용이 어려우면 <b>엑셀(CSV)</b> 또는 '
+      + '<b>PDF 저장</b>으로 내려받아 ' + esc(CFG.contactEmail) + ' 로 보내주세요.<br>'
+      + '수량은 비워두셔도 문의 가능합니다 — 담당자가 확인 후 견적서로 회신드립니다.';
+  }
+  buildChips(); render(); syncSel();
+})();
+</script>
+</body>
+</html>

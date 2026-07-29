@@ -196,7 +196,12 @@
 
   /* ── 리스트(테이블) 뷰 ───────────────── */
   .tblwrap{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
-  table.list{width:100%;border-collapse:collapse;font-size:13px;min-width:1080px}
+  /* table-layout:fixed — 필터를 바꿔도 열 너비가 흔들리지 않게 고정한다.
+     (auto 였을 때는 '전체'에서 긴 원산지 값이 246px까지 벌어지며 상품명을 260px로 눌렀다)
+     너비는 아래 colgroup 에서 지정한다. */
+  /* min-width 1280px : 이미지 열(5.83%)이 썸네일 74px보다 좁아지지 않는 하한.
+     그보다 좁은 화면에서는 .tblwrap 이 가로 스크롤된다. */
+  table.list{width:100%;border-collapse:collapse;font-size:13px;min-width:1280px;table-layout:fixed}
   table.list th{background:var(--bg);text-align:left;padding:11px 10px;font-size:12px;color:var(--ink-3);
     font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;z-index:1}
   table.list td{padding:11px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top}
@@ -206,16 +211,30 @@
   table.list tr.sel:hover{background:#ffe6df}
   table.list img{width:74px;height:74px;object-fit:contain;background:#fff;border:1px solid var(--line-soft);border-radius:6px;cursor:pointer}
   table.list .c-code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--ink-3);white-space:nowrap}
-  /* 잘림 방지: 카테고리는 줄바꿈 금지, 상품명·구성은 넉넉히, 상세설명은 폭을 줄이고 3줄로 제한 */
-  table.list .c-cat{white-space:nowrap;width:1%}
-  table.list .c-name{font-weight:700;min-width:260px;max-width:380px;cursor:pointer;
-    word-break:keep-all;overflow-wrap:anywhere}
+  /* ── 열 너비 고정 (카테고리 선택 상태 기준으로 실측한 값) ──
+     1612px 기준 실측값을 백분율로 환산해 합계 100% 로 맞췄다.
+     col 에는 calc() 가 먹지 않는 브라우저가 있어 백분율로만 지정한다.
+     전부 백분율이라 화면이 넓어져도 비율을 유지하며 함께 늘어난다.
+        체크 46 · 이미지 94 · 상품코드 84 · 카테고리 100 · 상품명 342
+        구성 228 · 상세설명 380 · 원산지 130 · 과세여부 62 · 가격 146 */
+  table.list col.w-chk  {width:2.85%}
+  table.list col.w-img  {width:5.83%}
+  table.list col.w-code {width:5.21%}
+  table.list col.w-cat  {width:6.21%}
+  table.list col.w-name {width:21.22%}
+  table.list col.w-comp {width:14.15%}
+  table.list col.w-desc {width:23.57%}
+  table.list col.w-orig {width:8.07%}
+  table.list col.w-tax  {width:3.85%}
+  table.list col.w-price{width:9.04%}
+
+  /* fixed 레이아웃에서는 셀 내용이 넘치면 잘리므로, 한글은 단어 단위로 줄바꿈시킨다 */
+  table.list .c-cat{word-break:keep-all;overflow-wrap:anywhere}
+  table.list .c-name{font-weight:700;cursor:pointer;word-break:keep-all;overflow-wrap:anywhere}
   table.list .c-name:hover{color:var(--vendys)}
-  table.list .c-comp{color:var(--ink-2);width:230px;min-width:190px;max-width:280px;font-size:12px;
-    word-break:keep-all;overflow-wrap:anywhere}
-  table.list .c-desc{color:var(--ink-2);width:380px;min-width:320px;max-width:420px;
-    font-size:12px;line-height:1.55}
-  table.list .c-orig{white-space:nowrap;width:1%}
+  table.list .c-comp{color:var(--ink-2);font-size:12px;word-break:keep-all;overflow-wrap:anywhere}
+  table.list .c-desc{color:var(--ink-2);font-size:12px;line-height:1.55}
+  table.list .c-orig{word-break:keep-all;overflow-wrap:anywhere}
   table.list .c-desc .cut{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   table.list .c-desc a{color:var(--brand);text-decoration:none;font-weight:600;font-size:11.5px}
   table.list .c-price{text-align:right;white-space:nowrap}
@@ -572,7 +591,11 @@ function cardHtml(list) {
   }).join('') + '</div>';
 }
 function listHtml(list) {
-  return '<div class="tblwrap"><table class="list"><thead><tr>'
+  return '<div class="tblwrap"><table class="list">'
+    + '<colgroup><col class="w-chk"><col class="w-img"><col class="w-code"><col class="w-cat">'
+      + '<col class="w-name"><col class="w-comp"><col class="w-desc"><col class="w-orig">'
+      + '<col class="w-tax"><col class="w-price"></colgroup>'
+    + '<thead><tr>'
     + '<th><input type="checkbox" id="allChk"></th><th>이미지</th><th>상품코드</th><th>카테고리</th><th>상품명</th>'
     + '<th>구성</th><th>상세설명</th><th>원산지</th><th>과세여부</th><th style="text-align:right">가격</th>'
     + '</tr></thead><tbody>'

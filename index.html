@@ -172,6 +172,22 @@
   .thumb{width:100%;aspect-ratio:1/1;background:#fff;cursor:pointer;overflow:hidden;
     border-bottom:1px solid var(--line-soft)}
   .thumb img{width:100%;height:100%;object-fit:contain;display:block}
+
+  /* ── 이미지 준비중 대체 박스 ─────────────
+     썸네일 URL이 비어 있거나 로드에 실패한 상품에 표시한다. 외부 파일 없이 CSS로만 그린다. */
+  .noimg{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    background:repeating-linear-gradient(45deg,var(--line-soft),var(--line-soft) 8px,#fff 8px,#fff 16px);
+    color:var(--ink-3);font-size:11px;line-height:1.35;text-align:center;letter-spacing:-.01em;
+    box-sizing:border-box;flex-shrink:0}
+  .noimg i{font-size:16px;line-height:1;font-style:normal;opacity:.55}
+  .thumb .noimg{width:100%;height:100%;font-size:12.5px}
+  .thumb .noimg i{font-size:26px}
+  table.list .noimg{width:74px;height:74px;border:1px solid var(--line-soft);border-radius:6px;
+    cursor:pointer;font-size:10px}
+  .m-img .noimg{width:100%;aspect-ratio:1/1;font-size:14px}
+  .m-img .noimg i{font-size:34px}
+  table.qt .noimg{width:44px;height:44px;border-radius:5px;font-size:9px}
+  table.qt .noimg i{display:none}
   .pbody{padding:12px 14px 14px;display:flex;flex-direction:column;flex:1}
   .prow1{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
   .tag{font-size:10.5px;border-radius:5px;padding:2px 7px;font-weight:700;letter-spacing:.01em}
@@ -387,6 +403,9 @@
       font-size:11px;line-height:1.65;white-space:pre-wrap}
     #printArea .memo b{font-size:10.5px;color:#555}
     #printArea .note{margin-top:12px;font-size:10.5px;color:#555;line-height:1.6}
+    #printArea .noimg{width:46px;height:46px;background:#f0f2f5;border:1px solid #ccc;
+      font-size:8px;color:#777;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    #printArea .noimg i{display:none}
     #printArea img{width:46px;height:46px;object-fit:contain}
     @page{margin:14mm}
   }
@@ -578,6 +597,25 @@ function filtered() {
   return list;
 }
 
+/* ── 썸네일 ──────────────────────────────────
+   URL이 비어 있으면 바로 '이미지 준비중' 박스를 그리고,
+   URL이 있어도 로드에 실패하면 onerror 로 같은 박스로 교체한다. */
+const NOIMG = '<i>🎁</i><span>이미지 준비중</span>';
+function noimgHtml(open) { return '<div class="noimg"' + (open ? ' data-open="' + open + '"' : '') + '>' + NOIMG + '</div>'; }
+function thumbHtml(p, open) {
+  if (!p.img) return noimgHtml(open);
+  return '<img src="' + esc(p.img) + '" alt="' + esc(p.name) + '" loading="lazy"'
+    + (open ? ' data-open="' + open + '"' : '') + ' onerror="imgFail(this)">';
+}
+// 깨진 이미지를 같은 자리에서 대체 박스로 바꾼다 (data-open 은 유지해 클릭 동작 보존)
+window.imgFail = function (el) {
+  const d = document.createElement('div');
+  d.className = 'noimg';
+  d.innerHTML = NOIMG;
+  if (el.dataset.open) d.dataset.open = el.dataset.open;
+  el.replaceWith(d);
+};
+
 /* ── 가격 표기 ──────────────────────── */
 function priceCard(p) {
   const r = rate(p);
@@ -646,7 +684,7 @@ function cardHtml(list) {
     const on = sel.has(p.code);
     return '<article class="pcard' + (on ? ' sel' : '') + '" data-code="' + p.code + '">'
       + '<input type="checkbox" class="pick" data-pick="' + p.code + '"' + (on ? ' checked' : '') + ' aria-label="선택">'
-      + '<div class="thumb" data-open="' + p.code + '"><img src="' + esc(p.img) + '" alt="' + esc(p.name) + '" loading="lazy"></div>'
+      + '<div class="thumb">' + thumbHtml(p, p.code) + '</div>'
       + '<div class="pbody">'
       + '<div class="prow1">' + (p.scat ? '<span class="tag cat">' + esc(p.scat) + '</span>' : '') + '<span class="tag tax">' + esc(p.tax) + '</span></div>'
       + '<div class="pname" data-open="' + p.code + '">' + esc(p.name) + '</div>'
@@ -671,7 +709,7 @@ function listHtml(list) {
       const on = sel.has(p.code), r = rate(p);
       return '<tr class="' + (on ? 'sel' : '') + '" data-code="' + p.code + '">'
         + '<td><input type="checkbox" data-pick="' + p.code + '"' + (on ? ' checked' : '') + '></td>'
-        + '<td><img src="' + esc(p.img) + '" alt="" loading="lazy" data-open="' + p.code + '"></td>'
+        + '<td>' + thumbHtml(p, p.code) + '</td>'
         + '<td class="c-code">' + esc(p.code) + '</td>'
         + '<td class="c-cat">' + (p.scat ? '<span class="tag cat">' + esc(p.scat) + '</span>'
             : '<span style="color:var(--ink-3)">-</span>') + '</td>'
@@ -692,7 +730,7 @@ function openModal(code) {
   const p = DATA.find(x => x.code === code); if (!p) return;
   const r = rate(p), on = sel.has(code);
   $('modal').innerHTML = '<button class="x" id="mX">&times;</button><div class="m-top">'
-    + '<div class="m-img"><img src="' + esc(p.img) + '" alt="' + esc(p.name) + '"></div><div>'
+    + '<div class="m-img">' + thumbHtml(p, '') + '</div><div>'
     + '<div class="prow1">' + (p.scat ? '<span class="tag cat">' + esc(p.scat) + '</span>' : '') + '<span class="tag tax">' + esc(p.tax) + '</span>'
       + '<span class="tag code">' + esc(p.code) + '</span></div>'
     + '<div class="m-name">' + esc(p.name) + '</div>'
@@ -757,7 +795,7 @@ function renderQt() {
     ? '<tr><td style="padding:44px;text-align:center;color:var(--ink-3)">선택한 상품이 없습니다.</td></tr>'
     : '<thead><tr><th colspan="2">상품</th><th class="num money">단가</th><th style="text-align:center">수량</th>'
       + '<th class="num money">금액</th><th></th></tr></thead><tbody>'
-      + rows.map(r => '<tr><td style="width:52px"><img src="' + esc(r.p.img) + '" alt=""></td>'
+      + rows.map(r => '<tr><td style="width:52px">' + thumbHtml(r.p, '') + '</td>'
         + '<td><div class="nm">' + esc(r.p.name) + '</div><div class="cd">' + esc(r.p.code) + (r.p.scat ? ' · ' + esc(r.p.scat) : '') + '</div></td>'
         + '<td class="num money">' + won(r.p.price) + '</td>'
         + '<td style="text-align:center"><input class="q" type="number" min="1" placeholder="-" '
@@ -786,7 +824,7 @@ function buildPrint() {
       + '주문 마감 ' + CFG.dueOfficial + '</div>'
     + '<table><thead><tr><th>이미지</th><th>상품코드</th><th>카테고리</th><th>상품명</th><th>구성</th>'
       + '<th>원산지</th><th>과세</th><th class="num">단가</th><th class="num">수량</th><th class="num">금액</th></tr></thead><tbody>'
-    + rows.map(r => '<tr><td><img src="' + esc(r.p.img) + '" alt=""></td><td>' + esc(r.p.code) + '</td>'
+    + rows.map(r => '<tr><td>' + thumbHtml(r.p, '') + '</td><td>' + esc(r.p.code) + '</td>'
         + '<td>' + esc(r.p.scat) + '</td><td>' + esc(r.p.name) + '</td><td>' + esc(r.p.comp) + '</td>'
         + '<td>' + esc(r.p.orig || '-') + '</td><td>' + esc(r.p.tax) + '</td>'
         + '<td class="num">' + won(r.p.price) + '</td><td class="num">' + (r.qty || '-') + '</td>'

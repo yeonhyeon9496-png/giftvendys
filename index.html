@@ -247,6 +247,21 @@
   .empty{grid-column:1/-1;text-align:center;padding:70px 20px;color:var(--ink-3);
     background:var(--card);border:1px dashed var(--line);border-radius:12px}
 
+  /* ── 페이지네이션 ───────────────────── */
+  .pager{display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;margin:22px 0 4px}
+  .pager button{min-width:36px;height:36px;padding:0 10px;border:1px solid var(--line);background:var(--card);
+    color:var(--ink-2);border-radius:8px;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+  .pager button:hover:not(:disabled){border-color:var(--brand-line);color:var(--brand)}
+  .pager button.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:800}
+  .pager button:disabled{opacity:.35;cursor:default}
+  .pager .gap{color:var(--ink-3);padding:0 4px;font-size:13px}
+  .pager .info{margin-left:10px;font-size:12.5px;color:var(--ink-3)}
+  @media (max-width:640px){
+    .pager button{min-width:32px;height:32px;padding:0 7px;font-size:12.5px}
+    .pager .info{margin-left:0;width:100%;text-align:center;margin-top:6px}
+  }
+  @media print{ .pager{display:none !important} }
+
   /* ── 상세 모달 ───────────────────────── */
   .mbg{position:fixed;inset:0;background:rgba(26,32,44,.55);z-index:200;display:none;
     align-items:center;justify-content:center;padding:24px}
@@ -430,6 +445,11 @@
       <option value="rt">할인율 높은순</option>
       <option value="nm">상품명순</option>
     </select>
+    <select class="sel" id="per">
+      <option value="300">300개씩 보기</option>
+      <option value="500">500개씩 보기</option>
+      <option value="1000">1,000개씩 보기</option>
+    </select>
     <div class="viewtog">
       <button data-view="list" class="on">리스트</button>
       <button data-view="card">카드</button>
@@ -439,6 +459,7 @@
   </div>
 
   <div id="view"></div>
+  <nav class="pager" id="pager" hidden></nav>
 
   <footer class="foot">
     <b>안내</b> · 표시 금액은 <b>부가세 포함 공급가</b>입니다. 재고·가격은 매입처 사정에 따라 변동될 수 있습니다.<br>
@@ -503,7 +524,8 @@ const rate = p => (p.was > p.price && p.price > 0) ? Math.round((1 - p.price / p
 const dday = iso => Math.ceil((new Date(iso + 'T23:59:59') - new Date()) / 86400000);
 
 /* ── 상태 ───────────────────────────── */
-const st = { tab: 'price', chip: '__all__', q: '', sort: 'def', view: 'list', onlySel: false };
+const st = { tab: 'price', chip: '__all__', q: '', sort: 'def', view: 'list', onlySel: false,
+             per: 300, page: 1 };   // per: 한 페이지에 보여줄 개수 (300/500/1000)
 const sel = new Map();   // code -> qty(숫자 또는 null)
 const PANEL_BODY = document.querySelector('.p-body').innerHTML;   // 접수 완료 후 되돌리기용 원본
 
@@ -566,12 +588,58 @@ function priceCard(p) {
 
 /* ── 렌더 ───────────────────────────── */
 function render() {
-  const list = filtered();
-  $('cnt').textContent = list.length;
-  $('cntSub').textContent = '(전체 ' + DATA.length + '개 중' + (st.q ? ' · 검색' : '') + (st.onlySel ? ' · 선택만' : '') + ')';
+  const all = filtered();
+  const per = st.per;
+  const pages = Math.max(1, Math.ceil(all.length / per));
+  if (st.page > pages) st.page = pages;       // 필터를 좁혀 페이지가 줄어든 경우 보정
+  if (st.page < 1) st.page = 1;
+  const from = (st.page - 1) * per;
+  const list = all.slice(from, from + per);
+
+  $('cnt').textContent = all.length;
+  $('cntSub').textContent = '(전체 ' + DATA.length + '개 중'
+    + (st.q ? ' · 검색' : '') + (st.onlySel ? ' · 선택만' : '')
+    + (pages > 1 ? ' · ' + (from + 1).toLocaleString('ko-KR') + '~' + (from + list.length).toLocaleString('ko-KR') + '번째' : '')
+    + ')';
+
   const v = $('view');
-  if (!list.length) { v.innerHTML = '<div class="empty">조건에 맞는 상품이 없습니다.<br>다른 그룹이나 검색어를 선택해 보세요.</div>'; return; }
+  if (!all.length) {
+    v.innerHTML = '<div class="empty">조건에 맞는 상품이 없습니다.<br>다른 그룹이나 검색어를 선택해 보세요.</div>';
+    renderPager(0, 1);
+    return;
+  }
   v.innerHTML = st.view === 'card' ? cardHtml(list) : listHtml(list);
+  renderPager(all.length, pages);
+}
+
+/* 페이지 번호 — 현재 페이지 주변만 보여주고 나머지는 … 으로 접는다 */
+function renderPager(total, pages) {
+  const el = $('pager');
+  if (pages <= 1) { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+  const cur = st.page, win = 2;          // 현재 페이지 좌우 2개씩
+  const nums = [];
+  for (let i = 1; i <= pages; i++) {
+    if (i === 1 || i === pages || (i >= cur - win && i <= cur + win)) nums.push(i);
+    else if (nums[nums.length - 1] !== '…') nums.push('…');
+  }
+  el.innerHTML =
+      '<button data-pg="1" ' + (cur === 1 ? 'disabled' : '') + ' aria-label="첫 페이지">«</button>'
+    + '<button data-pg="' + (cur - 1) + '" ' + (cur === 1 ? 'disabled' : '') + ' aria-label="이전">‹</button>'
+    + nums.map(n => n === '…'
+        ? '<span class="gap">…</span>'
+        : '<button data-pg="' + n + '"' + (n === cur ? ' class="on"' : '') + '>' + n + '</button>').join('')
+    + '<button data-pg="' + (cur + 1) + '" ' + (cur === pages ? 'disabled' : '') + ' aria-label="다음">›</button>'
+    + '<button data-pg="' + pages + '" ' + (cur === pages ? 'disabled' : '') + ' aria-label="마지막 페이지">»</button>'
+    + '<span class="info">' + cur + ' / ' + pages + ' 페이지 · 총 ' + total.toLocaleString('ko-KR') + '개</span>';
+}
+
+/* 페이지 이동 — 목록 맨 위로 스크롤해서 어디를 보고 있는지 잃지 않게 한다 */
+function goPage(n) {
+  st.page = n;
+  render(); syncSel();
+  const top = $('view').getBoundingClientRect().top + window.pageYOffset - 90;
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
 }
 function cardHtml(list) {
   return '<div class="grid">' + list.map(p => {
@@ -845,12 +913,14 @@ document.addEventListener('click', e => {
     return;
   }
   if (t.dataset.rm) { toggle(t.dataset.rm, false); return; }
+  const pg = t.closest('#pager button');
+  if (pg && !pg.disabled) { goPage(+pg.dataset.pg); return; }
   const op = t.closest('[data-open]'); if (op) return openModal(op.dataset.open);
   const chip = t.closest('#chips .chip');
-  if (chip && !chip.disabled) { st.chip = chip.dataset.k; buildChips(); render(); return; }
+  if (chip && !chip.disabled) { st.chip = chip.dataset.k; st.page = 1; buildChips(); render(); syncSel(); return; }
   const tab = t.closest('.tabs button');
-  if (tab) { st.tab = tab.dataset.tab; st.chip = '__all__';
-    document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b === tab)); buildChips(); render(); return; }
+  if (tab) { st.tab = tab.dataset.tab; st.chip = '__all__'; st.page = 1;
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b === tab)); buildChips(); render(); syncSel(); return; }
   const vw = t.closest('.viewtog button');
   if (vw) { st.view = vw.dataset.view;
     document.querySelectorAll('.viewtog button').forEach(b => b.classList.toggle('on', b === vw)); render(); syncSel(); return; }
@@ -869,10 +939,12 @@ document.addEventListener('input', e => {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closePanel(); } });
 
-$('q').oninput = e => { st.q = e.target.value; render(); syncSel(); };
-$('sort').onchange = e => { st.sort = e.target.value; render(); syncSel(); };
+// 검색·정렬·필터가 바뀌면 1페이지로 돌아간다 (안 그러면 결과가 줄었을 때 빈 화면이 보인다)
+$('q').oninput = e => { st.q = e.target.value; st.page = 1; render(); syncSel(); };
+$('sort').onchange = e => { st.sort = e.target.value; st.page = 1; render(); syncSel(); };
+$('per').onchange = e => { st.per = parseInt(e.target.value, 10) || 300; st.page = 1; render(); syncSel(); };
 $('noMoney').onchange = e => document.body.classList.toggle('nomoney', e.target.checked);
-$('onlySel').onclick = () => { st.onlySel = !st.onlySel; $('onlySel').classList.toggle('on', st.onlySel); render(); syncSel(); };
+$('onlySel').onclick = () => { st.onlySel = !st.onlySel; st.page = 1; $('onlySel').classList.toggle('on', st.onlySel); render(); syncSel(); };
 $('clearSel').onclick = $('sbClear').onclick = () => { if (sel.size && confirm('선택을 모두 해제할까요?')) { sel.clear(); syncSel(); render(); } };
 
 const openPanel = () => { $('panel').classList.add('open'); $('pbg').classList.add('open'); document.body.style.overflow = 'hidden'; };
@@ -995,6 +1067,7 @@ $('bPdf').onclick = () => { if (!sel.size) return toast('선택한 상품이 없
     $('pNote').innerHTML = '<b>PDF 저장</b>으로 내려받아 ' + esc(CFG.contactEmail) + ' 로 보내주세요.<br>'
       + '수량은 비워두셔도 문의 가능합니다 — 담당자가 확인 후 견적서로 회신드립니다.';
   }
+  $('per').value = String(st.per);      // 새로고침 시에도 기본값과 화면이 일치하게
   buildChips(); render(); syncSel();
 })();
 </script>
